@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Details - Babar Real Estate</title>
+    <style>
+        body { background: #000; color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; text-align: center; }
+        .card { max-width: 600px; margin: 50px auto; border: 2px solid #D4AF37; padding: 30px; border-radius: 15px; background: #111; }
+        h1 { color: #D4AF37; }
+        .price { font-size: 24px; color: #2ecc71; font-weight: bold; }
+        .back-btn { display: inline-block; margin-top: 20px; color: #000; background: #D4AF37; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>AD DETAILS</h1>
+        <div id="details">
+            <p>Loading property information...</p>
+        </div>
+        <a href="inventory.html" class="back-btn">BACK TO LIST</a>
+    </div>
+
+    <script>
+        // URL se data nikalne ke liye
+        const params = new URLSearchParams(window.location.search);
+        const title = params.get('title') || 'Property Title';
+        const price = params.get('price') || 'N/A';
+        const loc = params.get('location') || 'N/A';
+
+        document.getElementById('details').innerHTML = `
+            <h2>${title}</h2>
+            <p><strong>Location:</strong> ${loc}</p>
+            <p class="price">Price: PKR ${price}</p>
+            <p style="color: #aaa;">Full details and images are being synced from Google Sheets...</p>
+        `;
+    </script>
+</body>
+</html>
