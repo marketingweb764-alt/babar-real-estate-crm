@@ -48,12 +48,9 @@
         const name = document.getElementById('regName').value;
         const email = document.getElementById('regEmail').value;
         const pass = document.getElementById('regPass').value;
-
         if(!name || !email || !pass) { alert("Please fill all fields"); return; }
-
         let users = JSON.parse(localStorage.getItem('crm_users')) || [];
         if(users.find(u => u.email === email)) { alert("Email already exists!"); return; }
-
         users.push({ name, email, pass });
         localStorage.setItem('crm_users', JSON.stringify(users));
         alert("Registration Successful! Now Login.");
@@ -63,10 +60,8 @@
     function handleLogin() {
         const email = document.getElementById('loginEmail').value;
         const pass = document.getElementById('loginPass').value;
-
         let users = JSON.parse(localStorage.getItem('crm_users')) || [];
         
-        // CEO special access
         if(email === "admin@babar.com" && pass === "babar123") {
             sessionStorage.setItem('loggedIn', 'true');
             sessionStorage.setItem('userName', 'Babar Mughal');
@@ -86,6 +81,5 @@
         }
     }
 </script>
-
 </body>
 </html>
