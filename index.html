@@ -1,10 +1,7 @@
 <script>
-    // Security Check: Agar login nahi kiya toh seedha login page par bhej do
     if (sessionStorage.getItem('loggedIn') !== 'true') {
         window.location.href = "login.html";
     }
-
-    // Logout Function
     function logout() {
         sessionStorage.removeItem('loggedIn');
         window.location.href = "login.html";
@@ -16,131 +13,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Babar Real Estate - CRM Dashboard</title>
+    <title>Babar Real Estate - Admin Panel</title>
     <style>
         body { background: #000; color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; }
         
         /* Premium Header */
         header { 
-            background: linear-gradient(180deg, #111 0%, #000 100%); 
-            padding: 40px 20px; 
+            background: linear-gradient(180deg, #1a1a1a 0%, #000 100%); 
+            padding: 20px 20px 30px; 
             text-align: center; 
             border-bottom: 2px solid #D4AF37; 
             position: relative;
         }
-        
-        .logout-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: #e74c3c;
-            color: #fff;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 11px;
-            cursor: pointer;
-            font-weight: bold;
+
+        .main-logo {
+            width: 120px;
+            margin-bottom: 40px;
+            margin-top: 10px;
         }
 
-        header h1 { color: #D4AF37; margin: 0; letter-spacing: 3px; font-size: 26px; text-transform: uppercase; }
-        header p { color: #888; font-size: 13px; margin-top: 5px; }
-        
-        /* Stats Bar */
-        .stats-bar { 
-            background: #D4AF37; 
-            color: #000; 
-            margin: -25px 20px 20px; 
-            padding: 15px; 
-            border-radius: 12px; 
-            display: flex; 
-            justify-content: space-around; 
-            font-weight: bold;
-            text-align: center;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        .ceo-profile {
+            width: 100px; height: 100px;
+            border: 3px solid #D4AF37;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            background: #111;
+            overflow: hidden;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
             position: relative;
+            z-index: 5;
+        }
+        .ceo-profile img { width: 100%; height: 100%; object-fit: cover; }
+
+        .logout-btn {
+            position: absolute; top: 20px; right: 20px;
+            background: rgba(231, 76, 60, 0.1); color: #e74c3c;
+            border: 1px solid #e74c3c; padding: 6px 12px;
+            border-radius: 5px; font-size: 10px; cursor: pointer;
+            font-weight: bold;
             z-index: 10;
         }
-        .stats-bar div { line-height: 1.2; }
+
+        header h1 { color: #D4AF37; margin: 5px 0; letter-spacing: 2px; font-size: 22px; text-transform: uppercase; }
+        header p { color: #888; font-size: 12px; margin: 0; letter-spacing: 1px; }
+        
+        .stats-bar { 
+            background: #D4AF37; color: #000; margin: -20px 20px 20px; 
+            padding: 15px; border-radius: 12px; display: flex; 
+            justify-content: space-around; font-weight: bold; text-align: center;
+            position: relative; z-index: 10;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+        .stats-bar div { line-height: 1.3; }
         .stats-bar small { display: block; font-size: 10px; text-transform: uppercase; opacity: 0.8; }
 
-        /* Grid Menu */
         .grid-container { 
-            display: grid; 
-            grid-template-columns: repeat(2, 1fr); 
-            gap: 15px; 
-            padding: 20px; 
-            max-width: 800px; 
-            margin: auto; 
+            display: grid; grid-template-columns: repeat(2, 1fr); 
+            gap: 15px; padding: 10px 20px; max-width: 800px; margin: auto; 
         }
         
         .card { 
-            background: #111; 
-            border: 1px solid #333; 
-            padding: 30px 15px; 
-            border-radius: 20px; 
-            text-align: center; 
-            text-decoration: none; 
+            background: #111; border: 1px solid #333; padding: 25px 10px; 
+            border-radius: 15px; text-align: center; text-decoration: none; 
             transition: 0.3s;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
         }
-        
-        .card:hover { border-color: #D4AF37; background: #1a1a1a; transform: translateY(-5px); box-shadow: 0 5px 15px rgba(212, 175, 55, 0.1); }
-        
-        .icon { font-size: 35px; margin-bottom: 12px; }
-        .card h3 { color: #D4AF37; margin: 5px 0; font-size: 16px; text-transform: uppercase; }
-        .card p { color: #666; font-size: 11px; margin: 0; }
+        .card:hover { border-color: #D4AF37; background: #161616; transform: translateY(-3px); }
+        .icon { font-size: 28px; margin-bottom: 10px; display: block; }
+        .card h3 { color: #D4AF37; margin: 0; font-size: 14px; text-transform: uppercase; }
+        .card p { color: #666; font-size: 10px; margin: 5px 0 0; }
 
-        /* Footer Branding */
-        .footer-note { text-align: center; color: #444; font-size: 11px; margin: 40px 0 20px; }
+        .footer-note { text-align: center; color: #444; font-size: 11px; margin: 30px 0; line-height: 1.5; }
     </style>
 </head>
 <body>
 
 <header>
     <button class="logout-btn" onclick="logout()">LOGOUT</button>
-    <h1>BABAR REAL ESTATE</h1>
-    <p>Premium CRM Control Panel</p>
+    
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEVvI7eYhezjFs4kCMSVpRh4W6Uoap6i4yXQ&s" class="main-logo" alt="Babar Real Estate Logo">
+    
+    <div class="ceo-profile">
+        <img src="https://zameen-images-live.s3-eu-west-1.amazonaws.com/user_profile/44c7a7f3-65d0-4e9b-8b46-64872ad46a2d/full.jpg" alt="CEO Babar Mughal">
+    </div>
+    
+    <h1>Babar Mughal</h1>
+    <p>Founder & CEO</p>
 </header>
 
 <div class="stats-bar">
-    <div><small>Listings</small>25+</div>
-    <div><small>Leads</small>Live</div>
-    <div><small>System</small>Secured</div>
+    <div><small>Team Size</small><span id="teamCount">5</span></div>
+    <div><small>Total Leads</small><span id="totalLeads">0</span></div>
+    <div><small>Properties</small>250+</div>
 </div>
 
 <div class="grid-container">
     <a href="inventory.html" class="card">
-        <div class="icon">🏠</div>
+        <span class="icon">🏠</span>
         <h3>Inventory</h3>
-        <p>Property Database</p>
+        <p>Live Property List</p>
     </a>
-    
     <a href="leads.html" class="card">
-        <div class="icon">👥</div>
-        <h3>Client Leads</h3>
-        <p>New Inquiries</p>
+        <span class="icon">👥</span>
+        <h3>Team Leads</h3>
+        <p>All Staff Inquiries</p>
     </a>
-    
     <a href="calculator.html" class="card">
-        <div class="icon">🧮</div>
+        <span class="icon">🧮</span>
         <h3>Calculator</h3>
-        <p>Installment Plans</p>
+        <p>Plot Installments</p>
     </a>
-    
-    <a href="tasks.html" class="card">
-        <div class="icon">📅</div>
-        <h3>Tasks</h3>
-        <p>Daily Schedule</p>
+    <a href="team.html" class="card">
+        <span class="icon">🛡️</span>
+        <h3>Management</h3>
+        <p>Manage Team Members</p>
     </a>
 </div>
 
 <div class="footer-note">
-    CRM Portal Design & Developed By<br>
-    <strong>Bilal Mughal Official</strong>
+    Premium Real Estate CRM Solution<br>
+    Developed By <strong>Bilal Mughal Official</strong>
 </div>
+
+<script>
+    window.onload = function() {
+        let leads = JSON.parse(localStorage.getItem('babar_leads')) || [];
+        document.getElementById('totalLeads').innerText = leads.length;
+        
+        let team = JSON.parse(localStorage.getItem('babar_team')) || [];
+        document.getElementById('teamCount').innerText = team.length > 0 ? team.length : "0";
+    }
+</script>
 
 </body>
 </html>
