@@ -9,26 +9,20 @@
         .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; padding-bottom: 15px; margin-bottom: 20px; }
         .header h1 { color: #D4AF37; font-size: 18px; margin: 0; text-transform: uppercase; }
         .back-btn { color: #fff; text-decoration: none; font-size: 12px; border: 1px solid #555; padding: 5px 10px; border-radius: 5px; }
-
         .admin-box { background: #111; padding: 20px; border-radius: 12px; border: 1px solid #D4AF37; margin-bottom: 25px; display: none; }
         input, select { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #222; background: #000; color: #fff; box-sizing: border-box; }
         .add-btn { background: #D4AF37; color: #000; width: 100%; padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
-
         .inventory-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
         .property-card { background: #1a1a1a; padding: 15px; border-radius: 12px; border: 1px solid #333; position: relative; }
         .property-card h3 { margin: 0; color: #D4AF37; font-size: 16px; }
         .property-card p { margin: 5px 0; font-size: 12px; color: #888; }
-        
         .tag { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; margin-right: 5px; text-transform: uppercase; }
         .tag-phase { background: #333; color: #D4AF37; }
-        .tag-size { background: #D4AF37; color: #000; }
-        
-        .status-badge { position: absolute; top: 15px; right: 15px; font-size: 10px; padding: 4px 8px; border-radius: 20px; }
+        .status-badge { position: absolute; top: 15px; right: 15px; font-size: 10px; padding: 4px 8px; border-radius: 20px; cursor: pointer; }
         .status-available { background: #27ae60; color: #fff; }
         .status-sold { background: #e74c3c; color: #fff; }
-
         .price-tag { color: #D4AF37; font-weight: bold; font-size: 15px; margin-top: 10px; display: block; }
-        .del-item { background: none; border: none; color: #e74c3c; font-size: 11px; cursor: pointer; padding: 0; margin-top: 10px; display: none; }
+        .del-item { background: none; border: none; color: #e74c3c; font-size: 11px; cursor: pointer; padding: 0; margin-top: 10px; }
     </style>
 </head>
 <body>
@@ -40,27 +34,27 @@
 
 <div class="admin-box" id="adminBox">
     <h2 style="font-size: 14px; margin-bottom: 15px; color: #888;">Add New Listing</h2>
-    <input type="text" id="propTitle" placeholder="Property Title (e.g. 1 Kanal Residential)">
+    <input type="text" id="propTitle" placeholder="Property Title">
     <select id="propProject">
         <option value="DHA Lahore">DHA Lahore</option>
         <option value="DHA Quetta">DHA Quetta</option>
         <option value="DHA Bahawalpur">DHA Bahawalpur</option>
-        <option value="Other">Other Project</option>
     </select>
-    <input type="text" id="propPhase" placeholder="Phase / Sector (e.g. Phase 6, Block M)">
-    <input type="text" id="propPrice" placeholder="Price (e.g. 4.5 Crore)">
+    <input type="text" id="propPhase" placeholder="Phase / Sector">
+    <input type="text" id="propPrice" placeholder="Price">
     <button class="add-btn" onclick="addProperty()">LIST PROPERTY</button>
 </div>
 
-<div class="inventory-grid" id="inventoryList">
-    </div>
+<div class="inventory-grid" id="inventoryList"></div>
 
 <script>
     const userRole = sessionStorage.getItem('userRole');
 
-    // Show Admin Section only if CEO
-    if(userRole === 'CEO') {
-        document.getElementById('adminBox').style.display = 'block';
+    window.onload = function() {
+        if(userRole === 'CEO') {
+            document.getElementById('adminBox').style.display = 'block';
+        }
+        displayInventory();
     }
 
     function addProperty() {
@@ -68,23 +62,13 @@
         const project = document.getElementById('propProject').value;
         const phase = document.getElementById('propPhase').value;
         const price = document.getElementById('propPrice').value;
-
         if(!title || !price) return;
-
         let inventory = JSON.parse(localStorage.getItem('babar_inventory')) || [];
-        inventory.unshift({
-            id: Date.now(),
-            title, project, phase, price,
-            status: 'Available'
-        });
-
+        inventory.unshift({ id: Date.now(), title, project, phase, price, status: 'Available' });
         localStorage.setItem('babar_inventory', JSON.stringify(inventory));
-        
-        // Clear Inputs
         document.getElementById('propTitle').value = '';
         document.getElementById('propPhase').value = '';
         document.getElementById('propPrice').value = '';
-
         displayInventory();
     }
 
@@ -108,25 +92,17 @@
     function displayInventory() {
         const inventory = JSON.parse(localStorage.getItem('babar_inventory')) || [];
         const container = document.getElementById('inventoryList');
-        
         container.innerHTML = inventory.map(p => `
             <div class="property-card">
-                <span class="status-badge ${p.status === 'Available' ? 'status-available' : 'status-sold'}" 
-                      onclick="toggleStatus(${p.id})">
-                    ${p.status}
-                </span>
+                <span class="status-badge ${p.status === 'Available' ? 'status-available' : 'status-sold'}" onclick="toggleStatus(${p.id})">${p.status}</span>
                 <span class="tag tag-phase">${p.project}</span>
                 <h3>${p.title}</h3>
-                <p>📍 Location: ${p.phase}</p>
+                <p>📍 ${p.phase}</p>
                 <span class="price-tag">PKR ${p.price}</span>
-                
-                ${userRole === 'CEO' ? `<button class="del-item" style="display:block" onclick="deleteItem(${p.id})">Remove Listing</button>` : ''}
+                ${userRole === 'CEO' ? `<button class="del-item" onclick="deleteItem(${p.id})">Remove</button>` : ''}
             </div>
         `).join('');
     }
-
-    window.onload = displayInventory;
 </script>
-
 </body>
 </html>
