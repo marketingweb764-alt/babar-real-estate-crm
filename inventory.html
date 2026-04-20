@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Property Inventory - Babar Real Estate</title>
+    <title>Inventory Dashboard - Babar Real Estate</title>
     <style>
         body { background: #000; color: #D4AF37; font-family: 'Segoe UI', sans-serif; padding: 20px; }
         .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #D4AF37; padding-bottom: 10px; }
@@ -11,18 +11,20 @@
         .inventory-table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #111; border-radius: 15px; overflow: hidden; }
         th, td { padding: 15px; text-align: left; border-bottom: 1px solid #333; }
         th { background: #D4AF37; color: #000; text-transform: uppercase; }
-        tr:hover { background: #222; cursor: pointer; }
+        tr:hover { background: #222; }
         .status-badge { padding: 5px 10px; border-radius: 5px; font-size: 12px; font-weight: bold; background: #28a745; color: #fff; }
+        .btn-view { background: #D4AF37; color: #000; padding: 8px 15px; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 12px; transition: 0.3s; }
+        .btn-view:hover { background: #fff; }
     </style>
 </head>
 <body>
 
 <div class="header">
-    <h1>BABAR REAL ESTATE</h1>
-    <p>Live Property Inventory (240+ Ads)</p>
+    <h1 style="letter-spacing: 2px;">BABAR REAL ESTATE</h1>
+    <p>Live Property Inventory (All 26 Pages)</p>
 </div>
 
-<input type="text" id="searchInput" class="search-box" placeholder="Search by Phase, Price, or Title (e.g. DHA Phase 6)..." onkeyup="filterTable()">
+<input type="text" id="searchInput" class="search-box" placeholder="Search by Phase, Price, or Title..." onkeyup="filterTable()">
 
 <table class="inventory-table" id="adTable">
     <thead>
@@ -35,46 +37,42 @@
         </tr>
     </thead>
     <tbody id="tableBody">
-        <tr><td colspan="5" style="text-align:center;">Loading Ads from Database...</td></tr>
+        <tr><td colspan="5" style="text-align:center; padding: 50px;">Fetching all ads from Google Sheets... Please wait.</td></tr>
     </tbody>
 </table>
 
 <script>
-    // Aapki Google Sheet ki ID
-    const sheetId = '1nAqg9ku1ZGDV5BbBCtpWupRSjQHMis4pKB5RSbCyxJY';
-    
-    // Yahan hum sirf un tabs ke naam likhenge jahan ads hain
-    // Aapki sheet ke hisab se main ne generic loop lagaya hai
+    // Aapka Apps Script Web App URL
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbwyG2TklQ64A8HHh1f9hOSESfJqpNH0z7Q9m0m4RxlapIIM_m5fBTnMlvfnjp5nP_ZRlQ/exec';
+
     async function loadInventory() {
         const tableBody = document.getElementById('tableBody');
-        tableBody.innerHTML = ""; // Clear loading text
 
         try {
-            // Note: Asli connection ke liye humein Google Sheets API ya CSV export link chahiye hota hai
-            const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json`;
+            const response = await fetch(scriptURL);
+            const data = await response.json();
             
-            const response = await fetch(url);
-            const text = await response.text();
-            const json = JSON.parse(text.substr(47).slice(0, -2));
-            const rows = json.table.rows;
+            tableBody.innerHTML = ""; // Purana loading message hatayein
 
-            rows.forEach((row, index) => {
-                // Team wale tab ko ignore karne ke liye hum check laga sakte hain
-                if(index > 0) { // First row headers hoti hain
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td>${row.c[0] ? row.c[0].v : 'N/A'}</td>
-                        <td>${row.c[1] ? row.c[1].v : 'DHA Lahore'}</td>
-                        <td>${row.c[2] ? row.c[2].v : 'Contact for Price'}</td>
-                        <td><span class="status-badge">Available</span></td>
-                        <td><button style="background:#D4AF37; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">View Ad</button></td>
-                    `;
-                    tableBody.appendChild(tr);
-                }
+            if (data.length === 0) {
+                tableBody.innerHTML = "<tr><td colspan='5' style='text-align:center;'>No ads found in the sheets.</td></tr>";
+                return;
+            }
+
+            data.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${item.title || 'N/A'}</td>
+                    <td>${item.location || 'DHA Lahore'}</td>
+                    <td>${item.price || 'Contact for Price'}</td>
+                    <td><span class="status-badge">Available</span></td>
+                    <td><a href="${item.link}" target="_blank" class="btn-view">VIEW AD</a></td>
+                `;
+                tableBody.appendChild(tr);
             });
         } catch (error) {
-            console.error("Error loading sheet:", error);
-            tableBody.innerHTML = "<tr><td colspan='5'>Error connecting to Sheet. Make sure it's shared as 'Anyone with link'.</td></tr>";
+            console.error("Error loading ads:", error);
+            tableBody.innerHTML = "<tr><td colspan='5' style='text-align:center; color: red;'>Connection Error: Make sure Apps Script is deployed as 'Anyone'.</td></tr>";
         }
     }
 
@@ -87,6 +85,7 @@
         }
     }
 
+    // Page load hote hi data fetch karein
     window.onload = loadInventory;
 </script>
 
