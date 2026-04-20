@@ -1,23 +1,146 @@
+<script>
+    // Security Check: Agar login nahi kiya toh seedha login page par bhej do
+    if (sessionStorage.getItem('loggedIn') !== 'true') {
+        window.location.href = "login.html";
+    }
+
+    // Logout Function
+    function logout() {
+        sessionStorage.removeItem('loggedIn');
+        window.location.href = "login.html";
+    }
+</script>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Babar Real Estate CRM</title>
+    <title>Babar Real Estate - CRM Dashboard</title>
     <style>
-        body { background: #000; color: #D4AF37; font-family: 'Segoe UI', sans-serif; text-align: center; padding: 50px; margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; }
-        .container { border: 2px solid #D4AF37; padding: 40px; border-radius: 15px; box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); }
-        h1 { font-size: 2.5rem; margin-bottom: 10px; }
-        p { color: #fff; margin-bottom: 30px; letter-spacing: 1px; }
-        .btn { background: #D4AF37; color: #000; padding: 15px 30px; border: none; border-radius: 8px; font-weight: bold; font-size: 1.1rem; cursor: pointer; text-decoration: none; display: inline-block; transition: 0.3s; }
-        .btn:hover { background: #fff; transform: scale(1.05); }
+        body { background: #000; color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; }
+        
+        /* Premium Header */
+        header { 
+            background: linear-gradient(180deg, #111 0%, #000 100%); 
+            padding: 40px 20px; 
+            text-align: center; 
+            border-bottom: 2px solid #D4AF37; 
+            position: relative;
+        }
+        
+        .logout-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #e74c3c;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 11px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        header h1 { color: #D4AF37; margin: 0; letter-spacing: 3px; font-size: 26px; text-transform: uppercase; }
+        header p { color: #888; font-size: 13px; margin-top: 5px; }
+        
+        /* Stats Bar */
+        .stats-bar { 
+            background: #D4AF37; 
+            color: #000; 
+            margin: -25px 20px 20px; 
+            padding: 15px; 
+            border-radius: 12px; 
+            display: flex; 
+            justify-content: space-around; 
+            font-weight: bold;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            position: relative;
+            z-index: 10;
+        }
+        .stats-bar div { line-height: 1.2; }
+        .stats-bar small { display: block; font-size: 10px; text-transform: uppercase; opacity: 0.8; }
+
+        /* Grid Menu */
+        .grid-container { 
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 15px; 
+            padding: 20px; 
+            max-width: 800px; 
+            margin: auto; 
+        }
+        
+        .card { 
+            background: #111; 
+            border: 1px solid #333; 
+            padding: 30px 15px; 
+            border-radius: 20px; 
+            text-align: center; 
+            text-decoration: none; 
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .card:hover { border-color: #D4AF37; background: #1a1a1a; transform: translateY(-5px); box-shadow: 0 5px 15px rgba(212, 175, 55, 0.1); }
+        
+        .icon { font-size: 35px; margin-bottom: 12px; }
+        .card h3 { color: #D4AF37; margin: 5px 0; font-size: 16px; text-transform: uppercase; }
+        .card p { color: #666; font-size: 11px; margin: 0; }
+
+        /* Footer Branding */
+        .footer-note { text-align: center; color: #444; font-size: 11px; margin: 40px 0 20px; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>BABAR REAL ESTATE</h1>
-        <p>End-Level Property Management & CRM</p>
-        <a href="inventory.html" class="btn">ADMIN DASHBOARD</a>
-    </div>
+
+<header>
+    <button class="logout-btn" onclick="logout()">LOGOUT</button>
+    <h1>BABAR REAL ESTATE</h1>
+    <p>Premium CRM Control Panel</p>
+</header>
+
+<div class="stats-bar">
+    <div><small>Listings</small>25+</div>
+    <div><small>Leads</small>Live</div>
+    <div><small>System</small>Secured</div>
+</div>
+
+<div class="grid-container">
+    <a href="inventory.html" class="card">
+        <div class="icon">🏠</div>
+        <h3>Inventory</h3>
+        <p>Property Database</p>
+    </a>
+    
+    <a href="leads.html" class="card">
+        <div class="icon">👥</div>
+        <h3>Client Leads</h3>
+        <p>New Inquiries</p>
+    </a>
+    
+    <a href="calculator.html" class="card">
+        <div class="icon">🧮</div>
+        <h3>Calculator</h3>
+        <p>Installment Plans</p>
+    </a>
+    
+    <a href="tasks.html" class="card">
+        <div class="icon">📅</div>
+        <h3>Tasks</h3>
+        <p>Daily Schedule</p>
+    </a>
+</div>
+
+<div class="footer-note">
+    CRM Portal Design & Developed By<br>
+    <strong>Bilal Mughal Official</strong>
+</div>
+
 </body>
 </html>
