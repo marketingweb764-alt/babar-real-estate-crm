@@ -6,27 +6,30 @@
     <title>Babar Real Estate - Inventory</title>
     <style>
         body { background: #000; color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; text-align: center; }
-        h1 { color: #D4AF37; margin-top: 30px; letter-spacing: 2px; }
-        .table-container { max-width: 1000px; margin: 40px auto; overflow-x: auto; border: 1px solid #333; border-radius: 10px; }
-        table { width: 100%; border-collapse: collapse; background: #111; }
-        th { background: #D4AF37; color: #000; padding: 15px; text-align: left; }
-        td { padding: 15px; border-bottom: 1px solid #222; text-align: left; }
-        .view-btn { background: #D4AF37; color: #000; padding: 8px 15px; text-decoration: none; font-weight: bold; border-radius: 4px; font-size: 12px; }
-        #status { padding: 50px; color: #D4AF37; font-weight: bold; }
+        h1 { color: #D4AF37; margin-top: 30px; letter-spacing: 2px; text-transform: uppercase; }
+        .table-container { max-width: 1000px; margin: 40px auto; border-radius: 15px; overflow: hidden; background: #111; border: 1px solid #333; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #D4AF37; color: #000; padding: 18px; text-align: left; font-size: 14px; text-transform: uppercase; }
+        td { padding: 15px; border-bottom: 1px solid #222; text-align: left; font-size: 15px; }
+        tr:hover { background: #1a1a1a; }
+        .view-btn { background: #D4AF37; color: #000; padding: 8px 15px; text-decoration: none; font-weight: bold; border-radius: 4px; font-size: 12px; transition: 0.3s; display: inline-block; }
+        .view-btn:hover { background: #fff; transform: translateY(-2px); }
+        #status { padding: 50px; color: #D4AF37; font-size: 18px; font-weight: bold; }
+        .price-tag { color: #2ecc71; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <h1>BABAR REAL ESTATE</h1>
-    <p>Live Property Inventory Management</p>
+    <h1>Inventory Dashboard</h1>
+    <p style="color: #888;">Babar Real Estate Premium Listings</p>
 
-    <div id="status">📡 Fetching Live Ads...</div>
+    <div id="status">📡 Fetching live data from Google Sheets...</div>
 
     <div class="table-container" id="tableBox" style="display:none;">
         <table>
             <thead>
                 <tr>
-                    <th>Property Title</th>
+                    <th>Property Details</th>
                     <th>Location</th>
                     <th>Price</th>
                     <th>Action</th>
@@ -37,42 +40,50 @@
     </div>
 
     <script>
-        // Aapka naya Published Link jo screenshot se liya gaya hai
+        // Aapka Published Link (CSV format ke liye fix kiya gaya)
         const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT_lsiGLyJcp-uZpYNdQRIanSmTphxpqPZN9FcUwcQrLh5HVYGPbSEFe3xCljueEgilCrjjdHOXMnaU/pub?output=csv';
 
-        async function fetchAds() {
+        async function fetchInventory() {
             try {
                 const response = await fetch(csvUrl);
-                const data = await response.text();
-                const rows = data.split('\n').slice(1); // Header row nikalne ke liye
+                const csvText = await response.text();
                 
+                // Data ko lines mein split karna
+                const rows = csvText.split('\n').map(row => row.split(','));
                 const tbody = document.getElementById('inventoryBody');
-                
-                rows.forEach(row => {
-                    const columns = row.split(',');
-                    if (columns.length >= 3 && columns[0].trim() !== "") {
+                tbody.innerHTML = '';
+
+                // Pehli line (Header) chor kar baki rows par kaam karna
+                for (let i = 1; i < rows.length; i++) {
+                    const row = rows[i];
+                    if (row.length >= 3 && row[0].trim() !== "") {
+                        const title = row[0].replace(/"/g, '').trim();
+                        const location = row[1].replace(/"/g, '').trim();
+                        const price = row[2].replace(/"/g, '').trim();
+
                         const tr = document.createElement('tr');
                         tr.innerHTML = `
-                            <td>${columns[0].replace(/"/g, '')}</td>
-                            <td>${columns[1].replace(/"/g, '')}</td>
-                            <td style="color: #2ecc71; font-weight: bold;">${columns[2].replace(/"/g, '')}</td>
+                            <td><strong>${title}</strong></td>
+                            <td>${location}</td>
+                            <td class="price-tag">${price}</td>
                             <td>
-                                <a href="ad-details.html?title=${encodeURIComponent(columns[0])}&price=${encodeURIComponent(columns[2])}&location=${encodeURIComponent(columns[1])}" class="view-btn">VIEW AD</a>
+                                <a href="ad-details.html?title=${encodeURIComponent(title)}&price=${encodeURIComponent(price)}&location=${encodeURIComponent(location)}" class="view-btn">VIEW AD</a>
                             </td>
                         `;
                         tbody.appendChild(tr);
                     }
-                });
+                }
 
                 document.getElementById('status').style.display = 'none';
                 document.getElementById('tableBox').style.display = 'block';
 
-            } catch (err) {
-                document.getElementById('status').innerText = "❌ Data load nahi ho raha. Link check karein.";
+            } catch (error) {
+                document.getElementById('status').innerHTML = "❌ Connection error. Please refresh page.";
+                console.error(error);
             }
         }
 
-        window.onload = fetchAds;
+        window.onload = fetchInventory;
     </script>
 </body>
 </html>
