@@ -1,85 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login & Register - Babar Real Estate</title>
-    <style>
-        body { background: #000; color: #fff; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .auth-card { background: #111; padding: 30px; border-radius: 20px; border: 1px solid #D4AF37; width: 100%; max-width: 350px; text-align: center; }
-        h1 { color: #D4AF37; font-size: 22px; margin-bottom: 20px; text-transform: uppercase; }
-        input { width: 100%; padding: 12px; margin-bottom: 10px; background: #000; border: 1px solid #333; border-radius: 8px; color: #fff; box-sizing: border-box; }
-        .btn { width: 100%; padding: 12px; background: #D4AF37; color: #000; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        .toggle-link { color: #888; font-size: 12px; margin-top: 15px; cursor: pointer; display: block; }
-        .toggle-link b { color: #D4AF37; }
-        .hidden { display: none; }
-    </style>
-</head>
-<body>
-
-<div class="auth-card">
-    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEVvI7eYhezjFs4kCMSVpRh4W6Uoap6i4yXQ&s" width="80" style="margin-bottom: 10px;">
-    
-    <div id="loginForm">
-        <h1>Team Login</h1>
-        <input type="email" id="loginEmail" placeholder="Email Address">
-        <input type="password" id="loginPass" placeholder="Password">
-        <button class="btn" onclick="handleLogin()">SIGN IN</button>
-        <span class="toggle-link" onclick="toggleForms()">New member? <b>Register Here</b></span>
-    </div>
-
-    <div id="registerForm" class="hidden">
-        <h1>Register</h1>
-        <input type="text" id="regName" placeholder="Full Name">
-        <input type="email" id="regEmail" placeholder="Email Address">
-        <input type="password" id="regPass" placeholder="Create Password">
-        <button class="btn" onclick="handleRegister()">CREATE ACCOUNT</button>
-        <span class="toggle-link" onclick="toggleForms()">Already have an account? <b>Login</b></span>
-    </div>
+<div id="loginForm">
+    <h1>Member Access</h1>
+    <input type="text" id="userUID" placeholder="Enter ID (Email)">
+    <input type="password" id="userKey" placeholder="Access Key">
+    <button class="btn" onclick="handleLogin()">ENTER PORTAL</button>
+    <span class="toggle-link" onclick="toggleForms()">New member? <b>Register Here</b></span>
 </div>
 
 <script>
-    function toggleForms() {
-        document.getElementById('loginForm').classList.toggle('hidden');
-        document.getElementById('registerForm').classList.toggle('hidden');
-    }
-
-    function handleRegister() {
-        const name = document.getElementById('regName').value;
-        const email = document.getElementById('regEmail').value;
-        const pass = document.getElementById('regPass').value;
-        if(!name || !email || !pass) { alert("Please fill all fields"); return; }
-        let users = JSON.parse(localStorage.getItem('crm_users')) || [];
-        if(users.find(u => u.email === email)) { alert("Email already exists!"); return; }
-        users.push({ name, email, pass });
-        localStorage.setItem('crm_users', JSON.stringify(users));
-        alert("Registration Successful! Now Login.");
-        toggleForms();
-    }
-
     function handleLogin() {
-        const email = document.getElementById('loginEmail').value;
-        const pass = document.getElementById('loginPass').value;
-        let users = JSON.parse(localStorage.getItem('crm_users')) || [];
+        const uid = document.getElementById('userUID').value;
+        const key = document.getElementById('userKey').value;
         
-        if(email === "admin@babar.com" && pass === "babar123") {
+        // Admin Bypass
+        if(uid === "admin@babar.com" && key === "babar123") {
             sessionStorage.setItem('loggedIn', 'true');
             sessionStorage.setItem('userName', 'Babar Mughal');
             sessionStorage.setItem('userRole', 'CEO');
             window.location.href = "index.html";
             return;
         }
+        // ... baqi logic wahi rahega
+    }
+</script><div id="loginForm">
+    <h1>Member Access</h1>
+    <input type="text" id="userUID" placeholder="Enter ID (Email)">
+    <input type="password" id="userKey" placeholder="Access Key">
+    <button class="btn" onclick="handleLogin()">ENTER PORTAL</button>
+    <span class="toggle-link" onclick="toggleForms()">New member? <b>Register Here</b></span>
+</div>
 
-        const user = users.find(u => u.email === email && u.pass === pass);
-        if(user) {
+<script>
+    function handleLogin() {
+        const uid = document.getElementById('userUID').value;
+        const key = document.getElementById('userKey').value;
+        
+        // Admin Bypass
+        if(uid === "admin@babar.com" && key === "babar123") {
             sessionStorage.setItem('loggedIn', 'true');
-            sessionStorage.setItem('userName', user.name);
-            sessionStorage.setItem('userRole', 'Team Member');
+            sessionStorage.setItem('userName', 'Babar Mughal');
+            sessionStorage.setItem('userRole', 'CEO');
             window.location.href = "index.html";
-        } else {
-            alert("Invalid Credentials!");
+            return;
         }
+        // ... baqi logic wahi rahega
     }
 </script>
-</body>
-</html>
