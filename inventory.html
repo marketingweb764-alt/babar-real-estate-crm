@@ -24,7 +24,7 @@
     <h1>BABAR REAL ESTATE</h1>
     <p class="sub-title">Live Property Inventory (25+ Listings)</p>
 
-    <div id="loader">📡 Fetching live data from Google Sheets...</div>
+    <div id="loader">📡 Connecting to Database...</div>
 
     <div class="table-container" id="mainBox" style="display:none;">
         <table>
@@ -41,12 +41,18 @@
     </div>
 
     <script>
-        // FIXED LINK: Format ko 'csv' mein tabdil kar diya gaya hai
-        const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT_lsiGLyJcp-uZpYNdQRIanSmTphxpqPZN9FcUwcQrLh5HVYGPbSEFe3xCljueEgilCrjjdHOXMnaU/pub?output=csv';
+        // PROXY USE KIYA HAI TAAKE CONNECTION ERROR NA AAYE
+        const sheetID = '2PACX-1vT_lsiGLyJcp-uZpYNdQRIanSmTphxpqPZN9FcUwcQrLh5HVYGPbSEFe3xCljueEgilCrjjdHOXMnaU';
+        const csvUrl = `https://cors-anywhere.herokuapp.com/https://docs.google.com/spreadsheets/d/e/${sheetID}/pub?output=csv`;
+        
+        // Backup direct link agar proxy slow ho
+        const directUrl = `https://docs.google.com/spreadsheets/d/e/${sheetID}/pub?output=csv`;
 
         async function fetchInventory() {
             try {
-                const response = await fetch(csvUrl);
+                // Pehle direct try karein, agar fail ho toh proxy se
+                let response = await fetch(directUrl).catch(() => fetch(csvUrl));
+                
                 if (!response.ok) throw new Error('Data fetch failed');
                 
                 const csvData = await response.text();
@@ -54,7 +60,6 @@
                 const tbody = document.getElementById('inventoryList');
                 tbody.innerHTML = '';
 
-                // Pehli row (Heading) ko chor kar baaki sab (25-26 ads) load honge
                 for (let i = 1; i < rows.length; i++) {
                     const columns = rows[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                     if (columns.length >= 3 && columns[0].trim() !== "") {
@@ -79,8 +84,7 @@
                 document.getElementById('mainBox').style.display = 'block';
 
             } catch (err) {
-                document.getElementById('loader').innerHTML = "❌ Error: Could not connect to Google Sheets. Make sure it's Published.";
-                console.error(err);
+                document.getElementById('loader').innerHTML = "❌ Connection Refused. Please refresh or check if Sheet is 'Published to Web'.";
             }
         }
 
