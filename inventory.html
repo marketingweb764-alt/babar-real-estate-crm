@@ -3,27 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Inventory - Babar Real Estate</title>
+    <title>Inventory - Babar Real Estate</title>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <style>
         body { background: #000; color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; text-align: center; }
-        h1 { color: #D4AF37; margin-top: 30px; letter-spacing: 2px; text-transform: uppercase; font-size: 28px; }
-        .table-container { max-width: 1100px; margin: 30px auto; background: #0a0a0a; border: 1px solid #333; border-radius: 12px; overflow-x: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        h1 { color: #D4AF37; margin-top: 30px; letter-spacing: 2px; text-transform: uppercase; }
+        .table-container { max-width: 1100px; margin: 30px auto; background: #0a0a0a; border: 1px solid #333; border-radius: 12px; overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; text-align: left; min-width: 700px; }
-        th { background: #D4AF37; color: #000; padding: 18px; font-size: 14px; text-transform: uppercase; }
+        th { background: #D4AF37; color: #000; padding: 18px; font-size: 14px; }
         td { padding: 15px; border-bottom: 1px solid #222; font-size: 15px; color: #ddd; }
-        tr:hover { background: #111; }
-        .view-btn { background: #D4AF37; color: #000; padding: 8px 15px; text-decoration: none; font-weight: bold; border-radius: 4px; font-size: 12px; transition: 0.3s; display: inline-block; }
-        .view-btn:hover { background: #fff; transform: translateY(-2px); }
+        .view-btn { background: #D4AF37; color: #000; padding: 8px 15px; text-decoration: none; font-weight: bold; border-radius: 4px; font-size: 12px; }
         #loader { padding: 60px; color: #D4AF37; font-size: 18px; font-weight: bold; }
     </style>
 </head>
 <body>
 
     <h1>BABAR REAL ESTATE</h1>
-    <p style="color:#888">Premium Property Inventory Dashboard</p>
-
-    <div id="loader">🔄 Connecting to Google Secure Database...</div>
+    <div id="loader">🔄 Loading Properties...</div>
     <div class="table-container" id="table_div"></div>
 
     <script type="text/javascript">
@@ -31,16 +27,16 @@
         google.charts.setOnLoadCallback(drawTable);
 
         function drawTable() {
-            // Aapki Sheet ki ID ke saath official Google Query link
+            // "Anyone with the link" hona lazmi hai
             var sheetID = '1lsiGLyJcp-uZpYNdQRIanSmTphxpqPZN9FcUwcQrLh5HVYGPbSEFe3xCljueEgilCrjjdHOXMnaU';
-            var query = new google.visualization.Query('https://docs.google.com/spreadsheets/d/' + sheetID + '/gviz/tq?tqx=out:html');
+            var query = new google.visualization.Query('https://docs.google.com/spreadsheets/d/' + sheetID + '/gviz/tq?tqx=out:csv');
 
             query.send(handleQueryResponse);
         }
 
         function handleQueryResponse(response) {
             if (response.isError()) {
-                document.getElementById('loader').innerHTML = '❌ Connection Error: Please refresh the page.';
+                document.getElementById('loader').innerHTML = '❌ Error: Please ensure your Google Sheet is "Shared with Anyone with link".';
                 return;
             }
 
@@ -48,10 +44,9 @@
             var html = '<table><thead><tr><th>Property Name</th><th>Location</th><th>Price</th><th>Action</th></tr></thead><tbody>';
 
             for (var row = 0; row < data.getNumberOfRows(); row++) {
-                // Pehli 3 columns uthana (A, B, C)
-                var title = data.getFormattedValue(row, 0) || "N/A";
-                var loc = data.getFormattedValue(row, 1) || "N/A";
-                var price = data.getFormattedValue(row, 2) || "N/A";
+                var title = data.getFormattedValue(row, 0);
+                var loc = data.getFormattedValue(row, 1);
+                var price = data.getFormattedValue(row, 2);
                 
                 html += '<tr>' +
                         '<td><strong>' + title + '</strong></td>' +
