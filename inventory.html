@@ -3,108 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Babar Real Estate - CRM Portal</title>
+    <title>Inventory - Babar Real Estate</title>
     <style>
-        body { background: #000; color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; }
-        
-        /* Header */
-        header { background: #111; padding: 40px 20px; text-align: center; border-bottom: 2px solid #D4AF37; }
-        header h1 { color: #D4AF37; margin: 0; letter-spacing: 3px; font-size: 26px; text-transform: uppercase; }
-        header p { color: #888; font-size: 13px; margin-top: 5px; }
-        
-        /* Stats Bar */
-        .stats-bar { 
-            background: #D4AF37; 
-            color: #000; 
-            margin: 20px; 
-            padding: 15px; 
-            border-radius: 12px; 
-            display: flex; 
-            justify-content: space-around; 
-            font-weight: bold;
-            text-align: center;
-            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.2);
-        }
-        .stats-bar small { display: block; font-size: 10px; text-transform: uppercase; opacity: 0.8; }
+        body { background: #000; color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; }
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; padding-bottom: 15px; margin-bottom: 20px; }
+        .header h1 { color: #D4AF37; font-size: 18px; margin: 0; text-transform: uppercase; }
+        .back-btn { color: #fff; text-decoration: none; font-size: 12px; border: 1px solid #555; padding: 5px 10px; border-radius: 5px; }
 
-        /* Grid Menu */
-        .grid-container { 
-            display: grid; 
-            grid-template-columns: repeat(2, 1fr); 
-            gap: 15px; 
-            padding: 10px 20px 40px; 
-            max-width: 800px; 
-            margin: auto; 
-        }
-        
-        .card { 
-            background: #111; 
-            border: 1px solid #333; 
-            padding: 30px 15px; 
-            border-radius: 15px; 
-            text-align: center; 
-            text-decoration: none; 
-            transition: 0.3s;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .card:hover { border-color: #D4AF37; background: #1a1a1a; transform: translateY(-5px); }
-        
-        /* Icons (Emoji replacement for now) */
-        .icon { font-size: 32px; margin-bottom: 12px; }
-        
-        .card h3 { color: #D4AF37; margin: 5px 0; font-size: 16px; text-transform: uppercase; }
-        .card p { color: #666; font-size: 11px; margin: 0; }
+        .admin-box { background: #111; padding: 20px; border-radius: 12px; border: 1px solid #D4AF37; margin-bottom: 25px; display: none; }
+        input, select { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #222; background: #000; color: #fff; box-sizing: border-box; }
+        .add-btn { background: #D4AF37; color: #000; width: 100%; padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
 
-        /* Footer Info */
-        .footer-note { text-align: center; color: #444; font-size: 12px; margin-top: 20px; }
+        .inventory-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        .property-card { background: #1a1a1a; padding: 15px; border-radius: 12px; border: 1px solid #333; position: relative; }
+        .property-card h3 { margin: 0; color: #D4AF37; font-size: 16px; }
+        .property-card p { margin: 5px 0; font-size: 12px; color: #888; }
+        
+        .tag { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; margin-right: 5px; text-transform: uppercase; }
+        .tag-phase { background: #333; color: #D4AF37; }
+        .tag-size { background: #D4AF37; color: #000; }
+        
+        .status-badge { position: absolute; top: 15px; right: 15px; font-size: 10px; padding: 4px 8px; border-radius: 20px; }
+        .status-available { background: #27ae60; color: #fff; }
+        .status-sold { background: #e74c3c; color: #fff; }
+
+        .price-tag { color: #D4AF37; font-weight: bold; font-size: 15px; margin-top: 10px; display: block; }
+        .del-item { background: none; border: none; color: #e74c3c; font-size: 11px; cursor: pointer; padding: 0; margin-top: 10px; display: none; }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>BABAR REAL ESTATE</h1>
-    <p>Official CRM Control Panel</p>
-</header>
-
-<div class="stats-bar">
-    <div><small>Active Listings</small>25+</div>
-    <div><small>Today's Leads</small>0</div>
-    <div><small>Server Status</small>Online</div>
+<div class="header">
+    <h1>Property Inventory</h1>
+    <a href="index.html" class="back-btn">← Home</a>
 </div>
 
-<div class="grid-container">
-    <a href="inventory.html" class="card">
-        <div class="icon">🏠</div>
-        <h3>Inventory</h3>
-        <p>Live Property Database</p>
-    </a>
-    
-    <a href="leads.html" class="card">
-        <div class="icon">👥</div>
-        <h3>Client Leads</h3>
-        <p>Manage New Inquiries</p>
-    </a>
-    
-    <a href="calculator.html" class="card">
-        <div class="icon">🧮</div>
-        <h3>Calculator</h3>
-        <p>Installment Plans</p>
-    </a>
-    
-    <a href="tasks.html" class="card">
-        <div class="icon">📅</div>
-        <h3>Tasks</h3>
-        <p>Meetings & Follow-ups</p>
-    </a>
+<div class="admin-box" id="adminBox">
+    <h2 style="font-size: 14px; margin-bottom: 15px; color: #888;">Add New Listing</h2>
+    <input type="text" id="propTitle" placeholder="Property Title (e.g. 1 Kanal Residential)">
+    <select id="propProject">
+        <option value="DHA Lahore">DHA Lahore</option>
+        <option value="DHA Quetta">DHA Quetta</option>
+        <option value="DHA Bahawalpur">DHA Bahawalpur</option>
+        <option value="Other">Other Project</option>
+    </select>
+    <input type="text" id="propPhase" placeholder="Phase / Sector (e.g. Phase 6, Block M)">
+    <input type="text" id="propPrice" placeholder="Price (e.g. 4.5 Crore)">
+    <button class="add-btn" onclick="addProperty()">LIST PROPERTY</button>
 </div>
 
-<div class="footer-note">
-    Design & Developed By Bilal Mughal Official
-</div>
+<div class="inventory-grid" id="inventoryList">
+    </div>
+
+<script>
+    const userRole = sessionStorage.getItem('userRole');
+
+    // Show Admin Section only if CEO
+    if(userRole === 'CEO') {
+        document.getElementById('adminBox').style.display = 'block';
+    }
+
+    function addProperty() {
+        const title = document.getElementById('propTitle').value;
+        const project = document.getElementById('propProject').value;
+        const phase = document.getElementById('propPhase').value;
+        const price = document.getElementById('propPrice').value;
+
+        if(!title || !price) return;
+
+        let inventory = JSON.parse(localStorage.getItem('babar_inventory')) || [];
+        inventory.unshift({
+            id: Date.now(),
+            title, project, phase, price,
+            status: 'Available'
+        });
+
+        localStorage.setItem('babar_inventory', JSON.stringify(inventory));
+        
+        // Clear Inputs
+        document.getElementById('propTitle').value = '';
+        document.getElementById('propPhase').value = '';
+        document.getElementById('propPrice').value = '';
+
+        displayInventory();
+    }
+
+    function toggleStatus(id) {
+        if(userRole !== 'CEO') return;
+        let inventory = JSON.parse(localStorage.getItem('babar_inventory'));
+        let item = inventory.find(p => p.id === id);
+        item.status = item.status === 'Available' ? 'Sold' : 'Available';
+        localStorage.setItem('babar_inventory', JSON.stringify(inventory));
+        displayInventory();
+    }
+
+    function deleteItem(id) {
+        if(userRole !== 'CEO') return;
+        let inventory = JSON.parse(localStorage.getItem('babar_inventory'));
+        inventory = inventory.filter(p => p.id !== id);
+        localStorage.setItem('babar_inventory', JSON.stringify(inventory));
+        displayInventory();
+    }
+
+    function displayInventory() {
+        const inventory = JSON.parse(localStorage.getItem('babar_inventory')) || [];
+        const container = document.getElementById('inventoryList');
+        
+        container.innerHTML = inventory.map(p => `
+            <div class="property-card">
+                <span class="status-badge ${p.status === 'Available' ? 'status-available' : 'status-sold'}" 
+                      onclick="toggleStatus(${p.id})">
+                    ${p.status}
+                </span>
+                <span class="tag tag-phase">${p.project}</span>
+                <h3>${p.title}</h3>
+                <p>📍 Location: ${p.phase}</p>
+                <span class="price-tag">PKR ${p.price}</span>
+                
+                ${userRole === 'CEO' ? `<button class="del-item" style="display:block" onclick="deleteItem(${p.id})">Remove Listing</button>` : ''}
+            </div>
+        `).join('');
+    }
+
+    window.onload = displayInventory;
+</script>
 
 </body>
 </html>
