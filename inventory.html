@@ -40,20 +40,29 @@
     </div>
 
     <script>
-        // Aapka Published Link (CSV format ke liye fix kiya gaya)
+        // Aapka Published CSV Link
         const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT_lsiGLyJcp-uZpYNdQRIanSmTphxpqPZN9FcUwcQrLh5HVYGPbSEFe3xCljueEgilCrjjdHOXMnaU/pub?output=csv';
 
         async function fetchInventory() {
             try {
+                console.log("Fetching data from:", csvUrl);
                 const response = await fetch(csvUrl);
-                const csvText = await response.text();
                 
-                // Data ko lines mein split karna
+                if (!response.ok) throw new Error('Network response was not ok');
+                
+                const csvText = await response.text();
+                console.log("Data Received:", csvText); // Debugging ke liye
+
                 const rows = csvText.split('\n').map(row => row.split(','));
                 const tbody = document.getElementById('inventoryBody');
                 tbody.innerHTML = '';
 
-                // Pehli line (Header) chor kar baki rows par kaam karna
+                // Agar data khali hai toh error show karein
+                if (rows.length <= 1) {
+                    document.getElementById('status').innerHTML = "⚠ Sheet is empty or data not found.";
+                    return;
+                }
+
                 for (let i = 1; i < rows.length; i++) {
                     const row = rows[i];
                     if (row.length >= 3 && row[0].trim() !== "") {
@@ -78,8 +87,8 @@
                 document.getElementById('tableBox').style.display = 'block';
 
             } catch (error) {
-                document.getElementById('status').innerHTML = "❌ Connection error. Please refresh page.";
-                console.error(error);
+                document.getElementById('status').innerHTML = "❌ Connection error. Please make sure the sheet is 'Published to Web'.";
+                console.error("Detailed Error:", error);
             }
         }
 
