@@ -1,1 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager - Babar Real Estate</title>
+    <style>
+        body { background: #000; color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; }
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; padding-bottom: 15px; margin-bottom: 25px; }
+        .header h1 { color: #D4AF37; font-size: 18px; margin: 0; text-transform: uppercase; }
+        .back-btn { color: #fff; text-decoration: none; font-size: 14px; border: 1px solid #555; padding: 5px 10px; border-radius: 5px; }
 
+        .input-section { background: #111; padding: 15px; border-radius: 10px; border: 1px solid #D4AF37; margin-bottom: 25px; display: flex; gap: 10px; }
+        input { flex: 1; padding: 12px; background: #000; border: 1px solid #444; border-radius: 6px; color: #fff; }
+        .add-btn { background: #D4AF37; color: #000; border: none; padding: 0 20px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+
+        .task-card { background: #1a1a1a; padding: 15px; border-radius: 10px; border-left: 4px solid #444; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .task-card.completed { border-left-color: #2ecc71; opacity: 0.6; }
+        .task-card.completed span { text-decoration: line-through; color: #888; }
+        
+        .check-btn { background: #2ecc71; color: #fff; border: none; padding: 5px 10px; border-radius: 4px; font-size: 12px; cursor: pointer; }
+        .del-btn { background: #e74c3c; color: #fff; border: none; padding: 5px 10px; border-radius: 4px; font-size: 12px; cursor: pointer; margin-left: 5px; }
+        .empty-msg { text-align: center; color: #444; margin-top: 40px; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>Daily Task Manager</h1>
+    <a href="index.html" class="back-btn">← Dashboard</a>
+</div>
+
+<div class="input-section">
+    <input type="text" id="taskInput" placeholder="Add new task (e.g. Meeting at Phase 6)...">
+    <button class="add-btn" onclick="addTask()">ADD</button>
+</div>
+
+<div id="taskList">
+    <p class="empty-msg">No tasks scheduled for today.</p>
+</div>
+
+<script>
+    function addTask() {
+        const input = document.getElementById('taskInput');
+        const text = input.value;
+        if(!text) return;
+
+        const tasks = JSON.parse(localStorage.getItem('babar_tasks')) || [];
+        tasks.unshift({ text, completed: false });
+        localStorage.setItem('babar_tasks', JSON.stringify(tasks));
+        
+        input.value = '';
+        displayTasks();
+    }
+
+    function toggleTask(index) {
+        const tasks = JSON.parse(localStorage.getItem('babar_tasks'));
+        tasks[index].completed = !tasks[index].completed;
+        localStorage.setItem('babar_tasks', JSON.stringify(tasks));
+        displayTasks();
+    }
+
+    function deleteTask(index) {
+        const tasks = JSON.parse(localStorage.getItem('babar_tasks'));
+        tasks.splice(index, 1);
+        localStorage.setItem('babar_tasks', JSON.stringify(tasks));
+        displayTasks();
+    }
+
+    function displayTasks() {
+        const tasks = JSON.parse(localStorage.getItem('babar_tasks')) || [];
+        const container = document.getElementById('taskList');
+        
+        if(tasks.length === 0) {
+            container.innerHTML = '<p class="empty-msg">No tasks scheduled for today.</p>';
+            return;
+        }
+
+        container.innerHTML = tasks.map((task, i) => `
+            <div class="task-card ${task.completed ? 'completed' : ''}">
+                <span>${task.text}</span>
+                <div>
+                    <button class="check-btn" onclick="toggleTask(${i})">${task.completed ? '↩' : '✓'}</button>
+                    <button class="del-btn" onclick="deleteTask(${i})">✕</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    window.onload = displayTasks;
+</script>
+
+</body>
+</html>
