@@ -1,1 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - Babar Real Estate</title>
+    <style>
+        body { background: #000; color: #fff; font-family: 'Segoe UI', sans-serif; text-align: center; padding: 40px 20px; }
+        .profile-card { background: #111; border: 1px solid #D4AF37; padding: 30px; border-radius: 20px; max-width: 400px; margin: auto; }
+        .preview-img { width: 120px; height: 120px; border-radius: 50%; border: 2px solid #D4AF37; object-fit: cover; margin-bottom: 20px; }
+        input { width: 100%; padding: 12px; margin-bottom: 20px; background: #000; border: 1px solid #333; color: #fff; border-radius: 8px; box-sizing: border-box; }
+        .btn { background: #D4AF37; color: #000; padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; }
+        .back-link { display: block; margin-top: 20px; color: #888; text-decoration: none; font-size: 13px; }
+    </style>
+</head>
+<body>
 
+<div class="profile-card">
+    <h1>My Profile</h1>
+    <img id="currentPic" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="preview-img">
+    <p style="font-size: 12px; color: #888;">Enter Image Link (Facebook/WhatsApp link)</p>
+    <input type="text" id="picUrl" placeholder="https://example.com/pic.jpg">
+    <button class="btn" onclick="saveProfile()">UPDATE PHOTO</button>
+    <a href="index.html" class="back-link">← Return to Dashboard</a>
+</div>
+
+<script>
+    const userName = sessionStorage.getItem('userName');
+    window.onload = function() {
+        const saved = localStorage.getItem('userPic_' + userName);
+        if(saved) document.getElementById('currentPic').src = saved;
+    }
+    function saveProfile() {
+        const url = document.getElementById('picUrl').value;
+        if(!url) return alert("Please enter URL");
+        localStorage.setItem('userPic_' + userName, url);
+        alert("Success! Photo Updated.");
+        window.location.href = "index.html";
+    }
+</script>
+</body>
+</html>
