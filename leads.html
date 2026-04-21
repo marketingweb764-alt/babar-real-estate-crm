@@ -94,7 +94,6 @@
         });
         localStorage.setItem('babar_leads', JSON.stringify(leads));
         
-        // Reset inputs
         document.getElementById('lName').value = '';
         document.getElementById('lPhone').value = '';
         document.getElementById('lNote').value = '';
@@ -105,7 +104,6 @@
         let leads = JSON.parse(localStorage.getItem('babar_leads')) || [];
         const container = document.getElementById('leadsList');
         
-        // Security: CEO sees everything, Team members see only their leads
         if(userRole !== 'CEO') {
             leads = leads.filter(l => l.addedBy === userName);
         }
@@ -132,7 +130,6 @@
     }
 
     function contactWA(phone, name) {
-        // Cleaning phone number
         let cleanPhone = phone.replace(/\D/g, ''); 
         if(!cleanPhone.startsWith('92')) cleanPhone = '92' + cleanPhone.replace(/^0+/, '');
 
