@@ -1,150 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leads Management - Babar Real Estate</title>
-    <style>
-        body { background: #000; color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; }
-        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #D4AF37; padding-bottom: 15px; margin-bottom: 20px; }
-        .header h1 { color: #D4AF37; font-size: 18px; margin: 0; text-transform: uppercase; letter-spacing: 1px; }
-        .back-btn { color: #fff; text-decoration: none; font-size: 12px; border: 1px solid #333; padding: 8px 15px; border-radius: 8px; background: #111; }
+<script type="module">
+  // Firebase SDKs
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        /* Summary Button */
-        .summary-btn { background: linear-gradient(45deg, #D4AF37, #b8860b); color: #000; border: none; padding: 14px; border-radius: 10px; font-weight: bold; cursor: pointer; margin-bottom: 20px; width: 100%; text-transform: uppercase; font-size: 12px; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3); }
+  // Aapki Firebase Configuration (Wahi jo pehle thi)
+  const firebaseConfig = {
+    apiKey: "AIzaSy...", // Bilal bhai, yahan apni purani API Key paste karein
+    authDomain: "babar-realestate-crm.firebaseapp.com",
+    projectId: "babar-realestate-crm",
+    storageBucket: "babar-realestate-crm.appspot.com",
+    messagingSenderId: "...",
+    appId: "..."
+  };
 
-        /* Form Styling */
-        .form-container { background: #111; padding: 20px; border-radius: 15px; border: 1px solid #333; margin-bottom: 30px; }
-        input, select, textarea { width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 8px; border: 1px solid #222; background: #000; color: #fff; box-sizing: border-box; font-size: 14px; }
-        .submit-btn { background: #D4AF37; color: #000; width: 100%; padding: 14px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
+  // Initialize Firebase & Firestore
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
-        /* Priority Borders */
-        .priority-high { border-left: 6px solid #ff4d4d !important; box-shadow: 0 0 15px rgba(255, 77, 77, 0.15); }
-        .priority-medium { border-left: 6px solid #ffa500 !important; }
-        .priority-low { border-left: 6px solid #2ecc71 !important; }
+  // Lead Save Karne ka Function
+  const leadForm = document.getElementById('leadForm');
+  if(leadForm) {
+    leadForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const clientName = document.getElementById('clientName').value;
+      const clientPhone = document.getElementById('clientPhone').value;
+      const interest = document.getElementById('propertyInterest').value;
 
-        /* Lead Cards */
-        .lead-card { background: #161616; border-radius: 18px; padding: 20px; border: 1px solid #222; margin-bottom: 15px; position: relative; transition: 0.3s; }
-        .status-tag { position: absolute; top: 20px; right: 20px; font-size: 9px; font-weight: bold; padding: 5px 10px; border-radius: 6px; text-transform: uppercase; background: #222; color: #D4AF37; border: 1px solid #D4AF37; }
-        
-        .lead-card h3 { margin: 0; color: #D4AF37; font-size: 17px; margin-bottom: 5px; }
-        .lead-card p { margin: 4px 0; font-size: 13px; color: #bbb; }
-        
-        .btn-group { display: flex; gap: 8px; margin-top: 15px; flex-wrap: wrap; }
-        .btn-wa { background: #25D366; color: #fff; border: none; padding: 12px; border-radius: 8px; font-size: 11px; font-weight: bold; cursor: pointer; flex: 1.2; text-align: center; text-transform: uppercase; }
-        .btn-ceo { background: #D4AF37; color: #000; border: none; padding: 12px; border-radius: 8px; font-size: 11px; font-weight: bold; cursor: pointer; flex: 1; text-align: center; text-transform: uppercase; }
-        
-        .footer-info { font-size: 10px; color: #555; margin-top: 15px; border-top: 1px solid #222; padding-top: 12px; display: flex; justify-content: space-between; }
-    </style>
-</head>
-<body>
-
-<div class="header">
-    <h1>Lead Management</h1>
-    <a href="index.html" class="back-btn">← Home</a>
-</div>
-
-<button class="summary-btn" onclick="sendDailySummary()">📊 Send Daily Summary to CEO</button>
-
-<div class="form-container">
-    <input type="text" id="lName" placeholder="Client Name">
-    <input type="text" id="lPhone" placeholder="Phone Number (03...)">
-    <select id="lPriority">
-        <option value="low">Low Priority</option>
-        <option value="medium" selected>Medium Priority</option>
-        <option value="high">🔥 HIGH PRIORITY (VIP)</option>
-    </select>
-    <textarea id="lNote" placeholder="Interest/Plot details..."></textarea>
-    <button class="submit-btn" onclick="addLead()">Save Lead</button>
-</div>
-
-<div id="leadsList"></div>
-
-<script>
-    const userRole = sessionStorage.getItem('userRole');
-    const userName = sessionStorage.getItem('userName') || 'Team Member';
-    const CEO_NUMBER = '923244000041'; // Babar Mughal Sahib
-
-    window.onload = displayLeads;
-
-    function addLead() {
-        const name = document.getElementById('lName').value;
-        const phone = document.getElementById('lPhone').value;
-        const priority = document.getElementById('lPriority').value;
-        const note = document.getElementById('lNote').value;
-        if(!name || !phone) return alert("Name aur Phone lazmi dalein!");
-
-        let leads = JSON.parse(localStorage.getItem('babar_leads')) || [];
-        leads.unshift({ 
-            id: Date.now(), name, phone, priority, note, 
-            status: 'New', addedBy: userName, 
-            date: new Date().toLocaleDateString() 
+      try {
+        await addDoc(collection(db, "leads"), {
+          name: clientName,
+          phone: clientPhone,
+          property: interest,
+          timestamp: serverTimestamp()
         });
-        localStorage.setItem('babar_leads', JSON.stringify(leads));
-        
-        document.getElementById('lName').value = '';
-        document.getElementById('lPhone').value = '';
-        document.getElementById('lNote').value = '';
-        displayLeads();
-    }
-
-    function displayLeads() {
-        let leads = JSON.parse(localStorage.getItem('babar_leads')) || [];
-        const container = document.getElementById('leadsList');
-        if(userRole !== 'CEO') leads = leads.filter(l => l.addedBy === userName);
-
-        container.innerHTML = leads.map(l => `
-            <div class="lead-card priority-${l.priority}">
-                <span class="status-tag">${l.status}</span>
-                <h3>${l.name} ${l.priority === 'high' ? '⭐' : ''}</h3>
-                <p>📞 ${l.phone}</p>
-                <p style="color:#888; font-style: italic;">${l.note}</p>
-                
-                <div class="btn-group">
-                    <button class="btn-wa" onclick="contactAIWA('${l.phone}', '${l.name}', '${l.priority}', '${l.note}')">📲 AI MESSAGE</button>
-                    <button class="btn-ceo" onclick="reportToCEO('${l.id}')">📢 REPORT CEO</button>
-                </div>
-                
-                <div class="footer-info">
-                    <span>👤 ${l.addedBy}</span>
-                    <span>📅 ${l.date}</span>
-                </div>
-            </div>
-        `).join('') || '<p style="text-align:center; color:#444;">No leads yet.</p>';
-    }
-
-    // AI Smart Response Logic
-    function contactAIWA(phone, name, priority, note) {
-        let clean = phone.replace(/\D/g, ''); 
-        if(!clean.startsWith('92')) clean = '92' + clean.replace(/^0+/, '');
-
-        let msg = "";
-        if(priority === 'high') {
-            msg = `Salam *${name}* Sahib! Babar Real Estate se Bilal Mughal baat kar raha hoon. Aapka interest dekhte hue humne premium options ready kiye hain. Kya hum call par baat kar sakte hain?`;
-        } else {
-            msg = `Salam *${name}*! Babar Real Estate se rabta karne ka shukria. Aapki inquiry (Note: ${note}) humein mil gayi hai. Humari team jald details share karegi.`;
-        }
-
-        window.open(`https://wa.me/${clean}?text=${encodeURIComponent(msg)}`, '_blank');
-    }
-
-    function sendDailySummary() {
-        const leads = JSON.parse(localStorage.getItem('babar_leads')) || [];
-        const today = new Date().toLocaleDateString();
-        const todaysLeads = leads.filter(l => l.date === today);
-        
-        const highCount = todaysLeads.filter(l => l.priority === 'high').length;
-        const totalCount = todaysLeads.length;
-
-        let summary = `*DAILY PROGRESS REPORT*%0A*BABAR REAL ESTATE*%0A%0A📅 *Date:* ${today}%0A👤 *By:* ${userName}%0A%0A✅ *Total Leads:* ${totalCount}%0A🔥 *High Priority:* ${highCount}%0A%0A_System Generated Summary_`;
-        window.open(`https://wa.me/${CEO_NUMBER}?text=${summary}`, '_blank');
-    }
-
-    function reportToCEO(id) {
-        const l = (JSON.parse(localStorage.getItem('babar_leads'))).find(x => x.id == id);
-        const msg = `*LEAD REPORT*%0A👤 *Client:* ${l.name}%0A📊 *Priority:* ${l.priority.toUpperCase()}%0A📝 *Details:* ${l.note}%0A_Team: ${userName}_`;
-        window.open(`https://wa.me/${CEO_NUMBER}?text=${msg}`, '_blank');
-    }
+        alert("🎉 Lead Saved Successfully in Cloud!");
+        leadForm.reset();
+      } catch (error) {
+        console.error("Error adding document: ", error);
+        alert("Error: Data save nahi hua.");
+      }
+    });
+  }
 </script>
-</body>
-</html>
