@@ -3,39 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Babar Real Estate</title>
+    <title>Login - Babar Real Estate CRM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background: #000; color: #fff; font-family: 'Segoe UI', sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-        .login-card { background: #111; padding: 40px; border-radius: 20px; border: 1px solid #D4AF37; width: 90%; max-width: 350px; text-align: center; box-shadow: 0 10px 30px rgba(212, 175, 55, 0.1); }
-        h1 { color: #D4AF37; font-size: 22px; margin-bottom: 30px; text-transform: uppercase; letter-spacing: 2px; }
-        input { width: 100%; padding: 15px; margin-bottom: 20px; border-radius: 10px; border: 1px solid #222; background: #000; color: #fff; box-sizing: border-box; }
-        .login-btn { background: linear-gradient(45deg, #D4AF37, #b8860b); color: #000; width: 100%; padding: 15px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
-        p { font-size: 10px; color: #555; margin-top: 20px; letter-spacing: 1px; }
+        body { background-color: #000; background-image: radial-gradient(circle at center, #1a1a1a 0%, #000 100%); }
+        .gold-border { border: 1px solid #D4AF37; }
+        .gold-text { color: #D4AF37; }
+        .gold-bg { background: linear-gradient(45deg, #D4AF37, #b8860b); }
     </style>
 </head>
-<body>
+<body class="flex items-center justify-center min-h-screen p-4">
 
-<div class="login-card">
-    <h1>Babar Real Estate</h1>
-    <input type="text" id="username" placeholder="Username">
-    <input type="password" id="password" placeholder="Password">
-    <button class="login-btn" onclick="checkLogin()">Login to CRM</button>
-    <p>POST BY BILAL MUGHAL</p>
-</div>
+    <div class="w-full max-w-md p-8 space-y-6 bg-[#0a0a0a] rounded-2xl gold-border shadow-2xl">
+        <div class="text-center">
+            <h1 class="text-3xl font-bold tracking-widest gold-text uppercase">Babar Real Estate</h1>
+            <p class="mt-2 text-xs text-gray-500 uppercase tracking-widest">Enterprise Management System</p>
+        </div>
 
-<script>
-    function checkLogin() {
-        const user = document.getElementById('username').value;
-        const pass = document.getElementById('password').value;
+        <form class="space-y-4" id="loginForm">
+            <div>
+                <label class="block text-sm font-medium text-gray-400">Email Address</label>
+                <input type="email" id="email" required class="w-full px-4 py-3 mt-1 bg-black border border-gray-800 rounded-xl text-white focus:outline-none focus:border-[#D4AF37] transition-all" placeholder="admin@babar.com">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-400">Password</label>
+                <input type="password" id="password" required class="w-full px-4 py-3 mt-1 bg-black border border-gray-800 rounded-xl text-white focus:outline-none focus:border-[#D4AF37] transition-all" placeholder="••••••••">
+            </div>
 
-        // Aapka Secret Password
-        if(user === "admin" && pass === "babar786") {
-            sessionStorage.setItem('userRole', 'CEO');
-            window.location.href = "index.html"; // Login ke baad Dashboard par jayega
-        } else {
-            alert("Ghalat Password! Bilal bhai se rabta karein.");
-        }
-    }
-</script>
+            <div class="flex items-center justify-between text-xs">
+                <label class="flex items-center text-gray-500">
+                    <input type="checkbox" class="mr-2 accent-[#D4AF37]"> Remember me
+                </label>
+                <a href="#" onclick="alert('Gmail Reset System is being linked...')" class="gold-text hover:underline">Forgot Password?</a>
+            </div>
+
+            <button type="submit" class="w-full py-4 mt-4 font-bold text-black uppercase transition-all rounded-xl gold-bg hover:opacity-90 active:scale-95">
+                Login to Portal
+            </button>
+        </form>
+
+        <div class="text-center text-sm">
+            <span class="text-gray-500">New Team Member?</span>
+            <a href="register.html" class="ml-1 gold-text font-bold hover:underline">Create Account</a>
+        </div>
+
+        <p class="text-[10px] text-center text-gray-700 tracking-[0.2em] uppercase mt-8">Post By Bilal Mughal</p>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').onsubmit = function(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const pass = document.getElementById('password').value;
+
+            // Filhal master access
+            if(email === "admin@babar.com" && pass === "babar786") {
+                sessionStorage.setItem('userRole', 'CEO');
+                window.location.href = "index.html";
+            } else {
+                alert("Ghalat Email ya Password!");
+            }
+        };
+    </script>
 </body>
 </html>
