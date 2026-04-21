@@ -3,88 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Babar Real Estate | CRM Master</title>
+    <title>Babar Real Estate | Pro CRM</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        :root { --gold: #d4af37; --black: #000; }
-        body { background: var(--black); color: #fff; font-family: 'Poppins', sans-serif; margin: 0; overflow-x: hidden; }
-        .gold-text { color: var(--gold); }
-        .gold-bg { background: linear-gradient(45deg, #d4af37, #f4cf6d); color: #000; }
-        .gold-border { border: 1px solid var(--gold); }
-        .glass-card { background: #111; border: 1px solid #222; border-radius: 20px; padding: 25px; transition: 0.3s; cursor: pointer; }
-        .glass-card:hover { border-color: var(--gold); transform: translateY(-5px); }
-        .page { display: none; padding: 20px; max-width: 800px; margin: auto; animation: fadeIn 0.4s; }
+        :root { --gold: #d4af37; }
+        body { background: #000; color: #fff; font-family: sans-serif; }
+        .gold-bg { background: var(--gold); color: #000; }
+        .page { display: none; padding: 20px; }
         .active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        input, select, textarea { width: 100%; padding: 12px; margin-bottom: 12px; background: #000; border: 1px solid #333; color: #fff; border-radius: 10px; outline: none; }
-        input:focus { border-color: var(--gold); }
+        input { width: 100%; padding: 12px; margin: 8px 0; background: #111; border: 1px solid #333; color: #fff; border-radius: 8px; }
     </style>
 </head>
 <body>
 
-    <div id="loginPage" class="page active mt-20">
-        <div class="text-center mb-10">
-            <h1 class="text-4xl font-bold gold-text tracking-widest uppercase">Babar Real Estate</h1>
-            <p class="text-[10px] text-gray-500 mt-2">PREMIUM EXECUTIVE ACCESS</p>
+    <div id="authPage" class="page active max-w-md mx-auto mt-20 text-center">
+        <h1 class="text-3xl font-bold mb-2 text-[#d4af37]">BABAR REAL ESTATE</h1>
+        <p class="text-xs text-gray-500 mb-8 uppercase tracking-widest">Premium Executive Access</p>
+        
+        <div id="loginForm">
+            <input type="email" id="email" placeholder="Gmail Address">
+            <input type="password" id="pass" placeholder="Password">
+            <button onclick="handleLogin()" class="w-full py-3 gold-bg font-bold rounded-lg mt-2">LOGIN TO CRM</button>
+            <div class="flex justify-between mt-4 text-xs text-gray-400">
+                <span onclick="toggleAuth('forget')" class="cursor-pointer hover:text-white">Forget Password?</span>
+                <span onclick="toggleAuth('register')" class="cursor-pointer hover:text-white">Create Account</span>
+            </div>
         </div>
-        <div class="glass-card gold-border max-w-md mx-auto">
-            <input type="email" id="loginEmail" placeholder="Gmail Address">
-            <input type="password" id="loginPass" placeholder="Password">
-            <button onclick="showPage('dashboardPage')" class="w-full py-4 gold-bg font-bold rounded-xl uppercase">Login to CRM</button>
-            <p class="text-[10px] text-center mt-6 text-gray-700 tracking-widest">POST BY BILAL MUGHAL</p>
+
+        <div id="registerForm" class="hidden">
+            <input type="email" id="regEmail" placeholder="Enter Gmail">
+            <input type="password" id="regPass" placeholder="Create Password">
+            <button onclick="handleRegister()" class="w-full py-3 gold-bg font-bold rounded-lg mt-2">REGISTER</button>
+            <p onclick="toggleAuth('login')" class="mt-4 text-xs cursor-pointer">Back to Login</p>
         </div>
+
+        <div id="forgetForm" class="hidden">
+            <input type="email" id="forEmail" placeholder="Your Gmail Address">
+            <button onclick="handleForget()" class="w-full py-3 gold-bg font-bold rounded-lg mt-2">SEND RESET LINK</button>
+            <p onclick="toggleAuth('login')" class="mt-4 text-xs cursor-pointer">Back to Login</p>
+        </div>
+        <p class="mt-10 text-[10px] text-gray-600 tracking-widest">POST BY BILAL MUGHAL</p>
     </div>
 
     <div id="dashboardPage" class="page">
-        <div class="flex justify-between items-center mb-8 border-b border-gray-800 pb-4">
-            <h2 class="gold-text font-bold uppercase tracking-widest">Master Portal</h2>
-            <button onclick="showPage('loginPage')" class="text-xs text-red-500">Logout</button>
+        <div class="flex justify-between items-center mb-10 border-b border-gray-800 pb-4">
+            <h2 class="text-[#d4af37] font-bold">CEO PORTAL</h2>
+            <button onclick="logout()" class="text-red-500 text-xs">Logout</button>
         </div>
-        <div class="grid grid-cols-2 gap-4">
-            <div onclick="showPage('leadsPage')" class="glass-card">➕ Add Leads</div>
-            <div onclick="showPage('viewLeadsPage')" class="glass-card">📊 View Leads</div>
-            <div onclick="showPage('inventoryPage')" class="glass-card">🏠 Inventory</div>
-            <div onclick="showPage('accountsPage')" class="glass-card">💰 Accounts</div>
-            <div onclick="showPage('calcPage')" class="glass-card">🧮 Calculator</div>
-            <div onclick="showPage('teamPage')" class="glass-card">👥 Team</div>
-        </div>
-    </div>
-
-    <div id="leadsPage" class="page">
-        <button onclick="showPage('dashboardPage')" class="mb-4 text-sm gold-text">← Back</button>
-        <h2 class="text-xl mb-6 gold-text">Add New Lead</h2>
-        <div class="glass-card">
-            <input type="text" id="clientName" placeholder="Client Name">
-            <input type="text" id="clientPhone" placeholder="Phone Number">
-            <select id="propertyInterest">
-                <option value="DHA Lahore">DHA Lahore</option>
-                <option value="DHA Quetta">DHA Quetta</option>
-                <option value="DHA Bahawalpur">DHA Bahawalpur</option>
-            </select>
-            <button id="saveLeadBtn" class="w-full py-3 gold-bg font-bold rounded-lg">SAVE TO CLOUD</button>
-        </div>
-    </div>
-
-    <div id="calcPage" class="page">
-        <button onclick="showPage('dashboardPage')" class="mb-4 text-sm gold-text">← Back</button>
-        <h2 class="text-xl mb-6 gold-text">Installment Calculator</h2>
-        <div class="glass-card">
-            <input type="number" id="totalPrice" placeholder="Total Price">
-            <input type="number" id="downPayment" placeholder="Down Payment">
-            <input type="number" id="months" placeholder="Months">
-            <button onclick="calculatePlan()" class="w-full py-3 gold-bg font-bold rounded-lg">CALCULATE</button>
-            <div id="calcResult" class="mt-4 p-4 bg-white text-black rounded-lg hidden">
-                <p>Monthly: <b id="resMonthly">0</b></p>
+        <div class="grid grid-cols-1 gap-4">
+            <div onclick="showPage('leadsPage')" class="p-6 border border-gray-800 rounded-xl bg-[#111] hover:border-[#d4af37] cursor-pointer">
+                <h3 class="text-xl font-bold">+ Add Leads</h3>
+            </div>
+            <div onclick="showPage('teamPage')" class="p-6 border border-gray-800 rounded-xl bg-[#111] hover:border-[#d4af37] cursor-pointer">
+                <h3 class="text-xl font-bold">👥 Team & Targets</h3>
             </div>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-        // Firebase Config (Bilal bhai, ye wahi keys hain jo ap ne di thin)
         const firebaseConfig = {
             apiKey: "AIzaSyB-D3GjR5G_hL2x9X8zM0W4Q1V6S7N8P9",
             authDomain: "babar-realestate-crm.firebaseapp.com",
@@ -95,41 +74,47 @@
         };
 
         const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+        const auth = getAuth(app);
 
-        // Page Switcher Function
-        window.showPage = function(pageId) {
+        // UI Logic
+        window.toggleAuth = (mode) => {
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('registerForm').classList.add('hidden');
+            document.getElementById('forgetForm').classList.add('hidden');
+            document.getElementById(mode + 'Form').classList.remove('hidden');
+        }
+
+        window.showPage = (id) => {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById(pageId).classList.add('active');
-            window.scrollTo(0,0);
+            document.getElementById(id).classList.add('active');
         }
 
-        // Save Lead Logic
-        document.getElementById('saveLeadBtn').addEventListener('click', async () => {
-            const name = document.getElementById('clientName').value;
-            const phone = document.getElementById('clientPhone').value;
-            const property = document.getElementById('propertyInterest').value;
-
-            if(!name || !phone) return alert("Pehle details likhen!");
-
-            try {
-                await addDoc(collection(db, "leads"), {
-                    name, phone, property, timestamp: serverTimestamp()
-                });
-                alert("🎉 Mubarak! Data Cloud par save ho gaya.");
-                showPage('dashboardPage');
-            } catch (e) { alert("Error: Data save nahi hua."); }
-        });
-
-        // Calculator Logic
-        window.calculatePlan = function() {
-            const total = document.getElementById('totalPrice').value;
-            const down = document.getElementById('downPayment').value;
-            const m = document.getElementById('months').value;
-            const monthly = (total - down) / m;
-            document.getElementById('resMonthly').innerText = "Rs. " + Math.round(monthly).toLocaleString();
-            document.getElementById('calcResult').classList.remove('hidden');
+        // Auth Actions
+        window.handleLogin = () => {
+            const e = document.getElementById('email').value;
+            const p = document.getElementById('pass').value;
+            signInWithEmailAndPassword(auth, e, p)
+                .then(() => showPage('dashboardPage'))
+                .catch(err => alert("Login Failed: " + err.message));
         }
+
+        window.handleRegister = () => {
+            const e = document.getElementById('regEmail').value;
+            const p = document.getElementById('regPass').value;
+            createUserWithEmailAndPassword(auth, e, p)
+                .then(() => { alert("Account Created!"); toggleAuth('login'); })
+                .catch(err => alert(err.message));
+        }
+
+        window.handleForget = () => {
+            const e = document.getElementById('forEmail').value;
+            sendPasswordResetEmail(auth, e)
+                .then(() => alert("Reset link sent to your Gmail!"))
+                .catch(err => alert(err.message));
+        }
+
+        window.logout = () => signOut(auth).then(() => showPage('authPage'));
+
     </script>
 </body>
 </html>
