@@ -10,35 +10,28 @@
         .header h1 { color: #D4AF37; font-size: 18px; margin: 0; text-transform: uppercase; letter-spacing: 1px; }
         .back-btn { color: #fff; text-decoration: none; font-size: 12px; border: 1px solid #333; padding: 8px 15px; border-radius: 8px; background: #111; }
 
-        /* Search Bar */
         .search-box { margin-bottom: 20px; }
         #searchInput { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid #333; background: #111; color: #fff; outline: none; box-sizing: border-box; font-size: 14px; }
-        #searchInput:focus { border-color: #D4AF37; }
 
-        /* Add Lead Form */
         .form-container { background: #111; padding: 20px; border-radius: 15px; border: 1px solid #333; margin-bottom: 30px; }
-        input, select, textarea { width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 8px; border: 1px solid #222; background: #000; color: #fff; box-sizing: border-box; font-size: 14px; }
+        input, select, textarea { width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 8px; border: 1px solid #222; background: #000; color: #fff; box-sizing: border-box; }
         .submit-btn { background: #D4AF37; color: #000; width: 100%; padding: 14px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
 
-        /* Lead Cards */
-        .lead-card { background: #161616; border-radius: 18px; padding: 20px; border: 1px solid #222; margin-bottom: 15px; position: relative; transition: 0.3s; }
-        .status-tag { position: absolute; top: 20px; right: 20px; font-size: 9px; font-weight: bold; padding: 5px 10px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .lead-card { background: #161616; border-radius: 18px; padding: 20px; border: 1px solid #222; margin-bottom: 15px; position: relative; }
+        .status-tag { position: absolute; top: 20px; right: 20px; font-size: 9px; font-weight: bold; padding: 5px 10px; border-radius: 6px; text-transform: uppercase; }
         
-        /* Status Themes */
         .status-new { background: rgba(136, 136, 136, 0.1); color: #888; border: 1px solid #888; }
         .status-follow-up { background: rgba(241, 196, 15, 0.1); color: #f1c40f; border: 1px solid #f1c40f; }
         .status-meeting { background: rgba(52, 152, 219, 0.1); color: #3498db; border: 1px solid #3498db; }
         .status-closed { background: rgba(39, 174, 96, 0.1); color: #2ecc71; border: 1px solid #2ecc71; }
 
-        .lead-card h3 { margin: 0; color: #D4AF37; font-size: 17px; margin-bottom: 5px; }
-        .lead-card p { margin: 4px 0; font-size: 13px; color: #bbb; }
+        .lead-card h3 { margin: 0; color: #D4AF37; font-size: 17px; }
         .footer-info { font-size: 10px; color: #555; margin-top: 15px; border-top: 1px solid #222; padding-top: 12px; display: flex; justify-content: space-between; }
         
-        /* Action Buttons */
         .btn-group { display: flex; gap: 8px; margin-top: 15px; flex-wrap: wrap; }
-        .btn-wa { background: #25D366; color: #fff; border: none; padding: 10px 15px; border-radius: 8px; font-size: 11px; font-weight: bold; cursor: pointer; flex: 1; min-width: 120px; text-align: center; }
-        .btn-update { background: #222; color: #fff; border: 1px solid #333; padding: 10px 15px; border-radius: 8px; font-size: 11px; cursor: pointer; flex: 1; }
-        .btn-del { background: #c0392b; color: #fff; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; }
+        .btn-wa { background: #25D366; color: #fff; border: none; padding: 10px; border-radius: 8px; font-size: 11px; font-weight: bold; cursor: pointer; flex: 1; text-align: center; }
+        .btn-ceo { background: #D4AF37; color: #000; border: none; padding: 10px; border-radius: 8px; font-size: 11px; font-weight: bold; cursor: pointer; flex: 1; }
+        .btn-update { background: #222; color: #fff; border: 1px solid #333; padding: 10px; border-radius: 8px; font-size: 11px; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -49,28 +42,28 @@
 </div>
 
 <div class="search-box">
-    <input type="text" id="searchInput" onkeyup="searchLeads()" placeholder="Search by Client, Phone, User or Status...">
+    <input type="text" id="searchInput" onkeyup="searchLeads()" placeholder="Search Name, Phone, Status...">
 </div>
 
 <div class="form-container">
-    <h2 style="font-size: 14px; margin-bottom: 15px; color: #D4AF37; text-align: center;">ADD NEW POTENTIAL CLIENT</h2>
     <input type="text" id="lName" placeholder="Client Name">
-    <input type="text" id="lPhone" placeholder="Phone Number (923...)">
+    <input type="text" id="lPhone" placeholder="Phone (e.g. 0321...)">
     <select id="lStatus">
         <option value="New">New Lead</option>
         <option value="Follow-up">Follow-up</option>
         <option value="Meeting">Meeting Fixed</option>
         <option value="Closed">Deal Closed</option>
     </select>
-    <textarea id="lNote" placeholder="Interest (e.g. DHA Ph 6, 1 Kanal Plot)"></textarea>
-    <button class="submit-btn" onclick="addLead()">Save to Pipeline</button>
+    <textarea id="lNote" placeholder="Interest/Details..."></textarea>
+    <button class="submit-btn" onclick="addLead()">Save Lead</button>
 </div>
 
 <div id="leadsList"></div>
 
 <script>
     const userRole = sessionStorage.getItem('userRole');
-    const userName = sessionStorage.getItem('userName');
+    const userName = sessionStorage.getItem('userName') || 'Team Member';
+    const CEO_NUMBER = '923244000041'; // Babar Mughal Sahib
 
     window.onload = displayLeads;
 
@@ -79,70 +72,61 @@
         const phone = document.getElementById('lPhone').value;
         const status = document.getElementById('lStatus').value;
         const note = document.getElementById('lNote').value;
-
-        if(!name || !phone) return alert("Client Name and Phone are required!");
+        if(!name || !phone) return alert("Fill Name and Phone!");
 
         let leads = JSON.parse(localStorage.getItem('babar_leads')) || [];
-        leads.unshift({ 
-            id: Date.now(), 
-            name, 
-            phone, 
-            status, 
-            note, 
-            addedBy: userName, 
-            date: new Date().toLocaleDateString() 
-        });
+        leads.unshift({ id: Date.now(), name, phone, status, note, addedBy: userName, date: new Date().toLocaleDateString() });
         localStorage.setItem('babar_leads', JSON.stringify(leads));
         
         document.getElementById('lName').value = '';
         document.getElementById('lPhone').value = '';
-        document.getElementById('lNote').value = '';
         displayLeads();
     }
 
     function displayLeads() {
         let leads = JSON.parse(localStorage.getItem('babar_leads')) || [];
         const container = document.getElementById('leadsList');
-        
-        if(userRole !== 'CEO') {
-            leads = leads.filter(l => l.addedBy === userName);
-        }
+        if(userRole !== 'CEO') leads = leads.filter(l => l.addedBy === userName);
 
         container.innerHTML = leads.map(l => `
             <div class="lead-card lead-item">
                 <span class="status-tag status-${l.status.toLowerCase().replace(' ', '-')}">${l.status}</span>
                 <h3>${l.name}</h3>
                 <p>📞 ${l.phone}</p>
-                <p style="color:#888; font-style: italic;">"${l.note}"</p>
+                <p style="color:#777; font-size:12px;">${l.note}</p>
                 
                 <div class="btn-group">
-                    <button class="btn-wa" onclick="contactWA('${l.phone}', '${l.name}')">📲 WHATSAPP CLIENT</button>
-                    <button class="btn-update" onclick="cycleStatus(${l.id})">Cycle Status</button>
-                    ${userRole === 'CEO' ? `<button class="btn-del" onclick="deleteLead(${l.id})">🗑️</button>` : ''}
+                    <button class="btn-wa" onclick="contactWA('${l.phone}', '${l.name}')">📲 CLIENT</button>
+                    ${userRole !== 'CEO' ? `<button class="btn-ceo" onclick="reportToCEO('${l.id}')">📢 REPORT CEO</button>` : ''}
+                    <button class="btn-update" onclick="cycleStatus(${l.id})">Update Status</button>
                 </div>
                 
                 <div class="footer-info">
-                    <span>👤 Added by: ${l.addedBy}</span>
+                    <span>👤 ${l.addedBy}</span>
                     <span>📅 ${l.date}</span>
                 </div>
             </div>
-        `).join('') || '<p style="text-align:center; color:#444; margin-top:50px;">No leads found.</p>';
+        `).join('') || '<p style="text-align:center;">No leads found.</p>';
     }
 
     function contactWA(phone, name) {
-        let cleanPhone = phone.replace(/\D/g, ''); 
-        if(!cleanPhone.startsWith('92')) cleanPhone = '92' + cleanPhone.replace(/^0+/, '');
+        let clean = phone.replace(/\D/g, ''); 
+        if(!clean.startsWith('92')) clean = '92' + clean.replace(/^0+/, '');
+        const msg = `Salam *${name}*, Babar Real Estate se baat kar rahe hain...`;
+        window.open(`https://wa.me/${clean}?text=${encodeURIComponent(msg)}`, '_blank');
+    }
 
-        const msg = `Salam *${name}*, Babar Real Estate se *${userName}* baat kar raha hoon. Aapne property ke silsile mein inquiry ki thi. Hum mazeed kaise help kar sakte hain?`;
-        window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, '_blank');
+    function reportToCEO(id) {
+        const l = (JSON.parse(localStorage.getItem('babar_leads'))).find(x => x.id == id);
+        const msg = `*LEAD REPORT - BABAR REAL ESTATE*%0A%0A👤 *Client:* ${l.name}%0A📞 *Phone:* ${l.phone}%0A📊 *Status:* ${l.status}%0A📝 *Note:* ${l.note}%0A%0A_Reported by: ${userName}_`;
+        window.open(`https://wa.me/${CEO_NUMBER}?text=${msg}`, '_blank');
     }
 
     function cycleStatus(id) {
         let leads = JSON.parse(localStorage.getItem('babar_leads'));
         let l = leads.find(x => x.id == id);
         const steps = ['New', 'Follow-up', 'Meeting', 'Closed'];
-        let nextIndex = (steps.indexOf(l.status) + 1) % steps.length;
-        l.status = steps[nextIndex];
+        l.status = steps[(steps.indexOf(l.status) + 1) % steps.length];
         localStorage.setItem('babar_leads', JSON.stringify(leads));
         displayLeads();
     }
@@ -151,17 +135,7 @@
         let val = document.getElementById('searchInput').value.toLowerCase();
         let items = document.getElementsByClassName('lead-item');
         for(let i=0; i<items.length; i++) {
-            let content = items[i].innerText.toLowerCase();
-            items[i].style.display = content.includes(val) ? "block" : "none";
-        }
-    }
-
-    function deleteLead(id) {
-        if(confirm("Permanently delete this lead?")) {
-            let leads = JSON.parse(localStorage.getItem('babar_leads'));
-            leads = leads.filter(x => x.id != id);
-            localStorage.setItem('babar_leads', JSON.stringify(leads));
-            displayLeads();
+            items[i].style.display = items[i].innerText.toLowerCase().includes(val) ? "block" : "none";
         }
     }
 </script>
