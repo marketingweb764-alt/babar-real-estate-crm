@@ -1,1 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Babar Real Estate</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
+        const firebaseConfig = {
+            apiKey: "AIzaSyB988cyra9Nv--GPWQjlkaiR8MbGORsisU",
+            authDomain: "babar-realestate-crm.firebaseapp.com",
+            projectId: "babar-realestate-crm",
+            storageBucket: "babar-realestate-crm.firebasestorage.app",
+            messagingSenderId: "925746578953",
+            appId: "1:925746578953:web:3565573a20da750b0d1ad8"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        window.handleRegister = async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const pass = document.getElementById('pass').value;
+            try {
+                await createUserWithEmailAndPassword(auth, email, pass);
+                alert("Account ban gaya! Ab login karein.");
+                window.location.href = "login.html";
+            } catch (error) {
+                alert("Error: " + error.message);
+            }
+        };
+    </script>
+    <style>
+        body { background: #000; color: #fff; }
+        .gold-border { border: 1px solid #D4AF37; }
+        .gold-bg { background: linear-gradient(45deg, #D4AF37, #b8860b); }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+    <div class="w-full max-w-md p-8 bg-[#0a0a0a] rounded-2xl gold-border">
+        <h1 class="text-2xl font-bold text-[#D4AF37] text-center uppercase mb-6">Create Staff Account</h1>
+        <form onsubmit="handleRegister(event)" class="space-y-4">
+            <input type="text" placeholder="Full Name" class="w-full p-3 bg-black border border-gray-800 rounded-xl text-white outline-none focus:border-[#D4AF37]">
+            <input type="email" id="email" placeholder="Email Address" required class="w-full p-3 bg-black border border-gray-800 rounded-xl text-white outline-none focus:border-[#D4AF37]">
+            <input type="password" id="pass" placeholder="Create Password" required class="w-full p-3 bg-black border border-gray-800 rounded-xl text-white outline-none focus:border-[#D4AF37]">
+            <button type="submit" class="w-full py-4 font-bold text-black gold-bg rounded-xl uppercase">Register Now</button>
+        </form>
+        <p class="text-center text-sm text-gray-500 mt-4">Already have an account? <a href="login.html" class="text-[#D4AF37]">Login</a></p>
+    </div>
+</body>
+</html>
