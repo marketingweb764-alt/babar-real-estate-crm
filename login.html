@@ -3,67 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Babar Real Estate CRM</title>
+    <title>Login - Babar Real Estate</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyB988cyra9Nv--GPWQjlkaiR8MbGORsisU",
+            authDomain: "babar-realestate-crm.firebaseapp.com",
+            projectId: "babar-realestate-crm",
+            storageBucket: "babar-realestate-crm.firebasestorage.app",
+            messagingSenderId: "925746578953",
+            appId: "1:925746578953:web:3565573a20da750b0d1ad8"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        window.handleLogin = async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const pass = document.getElementById('pass').value;
+            try {
+                await signInWithEmailAndPassword(auth, email, pass);
+                window.location.href = "index.html";
+            } catch (error) {
+                alert("Login Failed: Ghalat Password!");
+            }
+        };
+
+        window.resetPassword = () => {
+            const email = document.getElementById('email').value;
+            if(!email) return alert("Pehle apna Email likhein!");
+            sendPasswordResetEmail(auth, email)
+                .then(() => alert("Password reset link aapke Gmail par bhej diya gaya hai!"))
+                .catch(err => alert(err.message));
+        };
+    </script>
     <style>
-        body { background-color: #000; background-image: radial-gradient(circle at center, #1a1a1a 0%, #000 100%); }
+        body { background: #000; color: #fff; }
         .gold-border { border: 1px solid #D4AF37; }
-        .gold-text { color: #D4AF37; }
         .gold-bg { background: linear-gradient(45deg, #D4AF37, #b8860b); }
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen p-4">
-
-    <div class="w-full max-w-md p-8 space-y-6 bg-[#0a0a0a] rounded-2xl gold-border shadow-2xl">
-        <div class="text-center">
-            <h1 class="text-3xl font-bold tracking-widest gold-text uppercase">Babar Real Estate</h1>
-            <p class="mt-2 text-xs text-gray-500 uppercase tracking-widest">Enterprise Management System</p>
+    <div class="w-full max-w-md p-8 bg-[#0a0a0a] rounded-2xl gold-border shadow-2xl">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-[#D4AF37] uppercase tracking-widest">Babar Real Estate</h1>
+            <p class="text-[10px] text-gray-500 mt-2">SECURE EXECUTIVE PORTAL</p>
         </div>
-
-        <form class="space-y-4" id="loginForm">
-            <div>
-                <label class="block text-sm font-medium text-gray-400">Email Address</label>
-                <input type="email" id="email" required class="w-full px-4 py-3 mt-1 bg-black border border-gray-800 rounded-xl text-white focus:outline-none focus:border-[#D4AF37] transition-all" placeholder="admin@babar.com">
+        <form onsubmit="handleLogin(event)" class="space-y-4">
+            <input type="email" id="email" placeholder="Gmail Address" required class="w-full p-3 bg-black border border-gray-800 rounded-xl text-white outline-none focus:border-[#D4AF37]">
+            <input type="password" id="pass" placeholder="Password" required class="w-full p-3 bg-black border border-gray-800 rounded-xl text-white outline-none focus:border-[#D4AF37]">
+            <div class="text-right">
+                <button type="button" onclick="resetPassword()" class="text-xs text-[#D4AF37] hover:underline">Forgot Password?</button>
             </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-400">Password</label>
-                <input type="password" id="password" required class="w-full px-4 py-3 mt-1 bg-black border border-gray-800 rounded-xl text-white focus:outline-none focus:border-[#D4AF37] transition-all" placeholder="••••••••">
-            </div>
-
-            <div class="flex items-center justify-between text-xs">
-                <label class="flex items-center text-gray-500">
-                    <input type="checkbox" class="mr-2 accent-[#D4AF37]"> Remember me
-                </label>
-                <a href="#" onclick="alert('Gmail Reset System is being linked...')" class="gold-text hover:underline">Forgot Password?</a>
-            </div>
-
-            <button type="submit" class="w-full py-4 mt-4 font-bold text-black uppercase transition-all rounded-xl gold-bg hover:opacity-90 active:scale-95">
-                Login to Portal
-            </button>
+            <button type="submit" class="w-full py-4 font-bold text-black gold-bg rounded-xl uppercase">Login to CRM</button>
         </form>
-
-        <div class="text-center text-sm">
-            <span class="text-gray-500">New Team Member?</span>
-            <a href="register.html" class="ml-1 gold-text font-bold hover:underline">Create Account</a>
-        </div>
-
-        <p class="text-[10px] text-center text-gray-700 tracking-[0.2em] uppercase mt-8">Post By Bilal Mughal</p>
+        <p class="text-center text-sm text-gray-500 mt-6">New here? <a href="register.html" class="text-[#D4AF37] font-bold">Register Account</a></p>
+        <p class="text-[10px] text-center text-gray-700 mt-10 tracking-widest">POST BY BILAL MUGHAL</p>
     </div>
-
-    <script>
-        document.getElementById('loginForm').onsubmit = function(e) {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const pass = document.getElementById('password').value;
-
-            // Filhal master access
-            if(email === "admin@babar.com" && pass === "babar786") {
-                sessionStorage.setItem('userRole', 'CEO');
-                window.location.href = "index.html";
-            } else {
-                alert("Ghalat Email ya Password!");
-            }
-        };
-    </script>
 </body>
 </html>
