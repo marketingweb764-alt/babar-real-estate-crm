@@ -7,44 +7,67 @@
     <style>
         body { background: #000; color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; }
         .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #D4AF37; padding-bottom: 15px; margin-bottom: 20px; }
-        .header h1 { color: #D4AF37; font-size: 20px; margin: 0; text-transform: uppercase; }
+        .header h1 { color: #D4AF37; font-size: 20px; margin: 0; text-transform: uppercase; letter-spacing: 1px; }
         .back-btn { color: #fff; text-decoration: none; font-size: 12px; border: 1px solid #333; padding: 8px 15px; border-radius: 8px; background: #111; }
 
-        #searchInput { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid #333; background: #111; color: #fff; outline: none; margin-bottom: 20px; box-sizing: border-box; }
+        /* Search Bar */
+        #searchInput { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid #333; background: #111; color: #fff; outline: none; margin-bottom: 20px; box-sizing: border-box; font-size: 14px; }
 
-        .admin-box { background: #111; padding: 20px; border-radius: 15px; border: 1px solid #D4AF37; margin-bottom: 30px; display: none; }
-        input, textarea { width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 8px; border: 1px solid #222; background: #000; color: #fff; box-sizing: border-box; }
+        /* Admin Add Section */
+        .admin-box { background: #111; padding: 20px; border-radius: 15px; border: 1px solid #333; margin-bottom: 30px; display: none; }
+        .admin-box h2 { font-size: 14px; color: #D4AF37; margin-top: 0; margin-bottom: 15px; text-transform: uppercase; }
+        input, textarea, select { width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 8px; border: 1px solid #222; background: #000; color: #fff; box-sizing: border-box; font-size: 14px; }
         .add-btn { background: #D4AF37; color: #000; width: 100%; padding: 14px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
 
+        /* Grid & Cards */
         .grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
-        .card { background: #111; border-radius: 18px; padding: 20px; border: 1px solid #222; position: relative; }
+        .card { background: #111; border-radius: 18px; padding: 20px; border: 1px solid #222; position: relative; transition: 0.3s; }
         .status-badge { position: absolute; top: 20px; right: 20px; padding: 5px 12px; border-radius: 6px; font-size: 10px; font-weight: bold; text-transform: uppercase; }
-        .available { background: rgba(39, 174, 96, 0.1); color: #2ecc71; border: 1px solid #2ecc71; }
+        .available { background: rgba(46, 204, 113, 0.1); color: #2ecc71; border: 1px solid #2ecc71; }
         .sold { background: rgba(231, 76, 60, 0.1); color: #e74c3c; border: 1px solid #e74c3c; }
 
-        .card h3 { margin: 0; color: #D4AF37; font-size: 18px; }
-        .price-tag { font-size: 20px; color: #fff; font-weight: bold; margin: 15px 0; display: block; }
+        .card h3 { margin: 0; color: #D4AF37; font-size: 18px; margin-bottom: 10px; }
+        .price-tag { font-size: 22px; color: #fff; font-weight: bold; margin-bottom: 10px; display: block; }
+        .card p { margin: 5px 0; font-size: 13px; color: #bbb; line-height: 1.4; }
         
-        .card-actions { display: flex; gap: 10px; margin-top: 15px; border-top: 1px solid #222; padding-top: 15px; }
-        .btn-wa { background: #25D366; color: #fff; border: none; padding: 12px; border-radius: 8px; flex: 2; cursor: pointer; font-size: 12px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 5px; text-transform: uppercase; }
-        .btn-status { background: #333; color: #fff; border: none; padding: 12px; border-radius: 8px; flex: 1; cursor: pointer; font-size: 11px; }
+        .card-actions { display: flex; gap: 10px; margin-top: 20px; border-top: 1px solid #222; padding-top: 15px; }
+        .btn-wa { background: #25D366; color: #fff; border: none; padding: 12px; border-radius: 8px; flex: 2; cursor: pointer; font-size: 12px; font-weight: bold; text-transform: uppercase; }
+        .btn-status { background: #333; color: #fff; border: none; padding: 12px; border-radius: 8px; flex: 1; cursor: pointer; font-size: 10px; text-transform: uppercase; }
     </style>
 </head>
 <body>
 
 <div class="header">
-    <h1>Inventory</h1>
-    <a href="index.html" class="back-btn">← Back</a>
+    <h1>Inventory & Maps</h1>
+    <a href="index.html" class="back-btn">← Home</a>
 </div>
 
-<input type="text" id="searchInput" onkeyup="searchPlots()" placeholder="Search Plot, Sector, Price...">
+<input type="text" id="searchInput" onkeyup="searchPlots()" placeholder="Search Plot No, Phase, or Price...">
 
 <div class="admin-box" id="adminBox">
-    <input type="text" id="pTitle" placeholder="Plot No / Name">
-    <input type="text" id="pSector" placeholder="Location / Sector">
-    <input type="text" id="pPrice" placeholder="Price (e.g. 3.5 Crore)">
-    <textarea id="pDesc" placeholder="Details (Facing park, Corner, etc.)"></textarea>
-    <button class="add-btn" onclick="addPlot()">Add to Inventory</button>
+    <h2>Add New Listing</h2>
+    <input type="text" id="pTitle" placeholder="Plot No (e.g. 124-M)">
+    
+    <select id="pMap">
+        <option value="">Select Phase Map (Optional)</option>
+        <option value="https://babarrealestate.com/wp-content/uploads/2026/04/PHASE-I.pdf">DHA Phase 1</option>
+        <option value="https://babarrealestate.com/wp-content/uploads/2026/04/PHASE-II.pdf">DHA Phase 2</option>
+        <option value="https://babarrealestate.com/wp-content/uploads/2026/04/PHASE-III-1.pdf">DHA Phase 3</option>
+        <option value="https://babarrealestate.com/wp-content/uploads/2026/04/PHASE-IV-1.pdf">DHA Phase 4</option>
+        <option value="https://babarrealestate.com/wp-content/uploads/2026/04/phase-5.pdf">DHA Phase 5</option>
+        <option value="https://babarrealestate.com/wp-content/uploads/2026/04/PHASE-VI-1.pdf">DHA Phase 6</option>
+        <option value="https://babarrealestate.com/wp-content/uploads/2026/04/PHASE-VII-1.pdf">DHA Phase 7</option>
+        <option value="https://babarrealestate.com/wp-content/uploads/2026/04/PHASE-VIII-2.pdf">DHA Phase 8 (Proper)</option>
+        <option value="https://babarrealestate.com/wp-content/uploads/2026/04/PHASE-VIII-Z.pdf">DHA Phase 8 (Z Ivy)</option>
+        <option value="https://babarrealestate.com/wp-content/uploads/2026/04/PHASE-IX-PRISM-2.pdf">DHA Phase 9 Prism</option>
+        <option value="https://babarrealestate.com/wp-content/uploads/2026/04/PHASE-IX-TOWN-1.pdf">DHA Phase 9 Town</option>
+        <option value="https://babarrealestate.com/wp-content/uploads/2026/04/PHASE-XI-1-3.pdf">DHA Phase 11 (Halloki)</option>
+        <option value="https://babarrealestate.com/wp-content/uploads/2026/04/PHASE-XII-EME.pdf">DHA Phase 12 (EME)</option>
+    </select>
+
+    <input type="text" id="pPrice" placeholder="Price (e.g. Rs. 4.25 Crore)">
+    <textarea id="pDesc" placeholder="Features: Facing Park, Corner, 40ft Road, Near Mosque..."></textarea>
+    <button class="add-btn" onclick="addPlot()">Add Plot to Inventory</button>
 </div>
 
 <div id="inventoryList" class="grid"></div>
@@ -53,26 +76,39 @@
     const userRole = sessionStorage.getItem('userRole');
 
     window.onload = function() {
-        if(userRole === 'CEO') document.getElementById('adminBox').style.display = 'block';
+        // Sirf CEO hi plot add kar sakega
+        if(userRole === 'CEO') {
+            document.getElementById('adminBox').style.display = 'block';
+        }
         displayInventory();
     }
 
     function addPlot() {
         const title = document.getElementById('pTitle').value;
-        const sector = document.getElementById('pSector').value;
+        const mapUrl = document.getElementById('pMap').value;
         const price = document.getElementById('pPrice').value;
         const desc = document.getElementById('pDesc').value;
 
-        if(!title || !price) return alert("Fill Plot No and Price!");
+        if(!title || !price) return alert("Plot No aur Price dena zaroori hai!");
 
         let inventory = JSON.parse(localStorage.getItem('babar_inventory')) || [];
-        inventory.unshift({ id: Date.now(), title, sector, price, desc, status: 'Available' });
+        inventory.unshift({ 
+            id: Date.now(), 
+            title, 
+            mapUrl, 
+            price, 
+            desc, 
+            status: 'Available' 
+        });
+
         localStorage.setItem('babar_inventory', JSON.stringify(inventory));
         
+        // Reset Inputs
         document.getElementById('pTitle').value = '';
-        document.getElementById('pSector').value = '';
         document.getElementById('pPrice').value = '';
         document.getElementById('pDesc').value = '';
+        document.getElementById('pMap').value = '';
+        
         displayInventory();
     }
 
@@ -84,24 +120,26 @@
             <div class="card inventory-card">
                 <span class="status-badge ${p.status.toLowerCase()}">${p.status}</span>
                 <h3>${p.title}</h3>
-                <p>📍 ${p.sector}</p>
-                <span class="price-tag">Rs. ${p.price}</span>
-                <p style="font-size: 12px; color: #888;">${p.desc}</p>
+                <span class="price-tag">${p.price}</span>
+                <p>${p.desc}</p>
+                ${p.mapUrl ? `<p style="color: #D4AF37; font-weight: bold; font-size: 11px;">📍 MAP ATTACHED</p>` : ''}
                 
                 <div class="card-actions">
-                    <button class="btn-wa" onclick="shareWA('${p.id}')">📲 SHARE ON WHATSAPP</button>
-                    ${userRole === 'CEO' ? `
-                        <button class="btn-status" onclick="toggleStatus(${p.id})">Sold/Avail</button>
-                    ` : ''}
+                    <button class="btn-wa" onclick="shareWA('${p.id}')">📲 Share with Client</button>
+                    ${userRole === 'CEO' ? `<button class="btn-status" onclick="toggleStatus(${p.id})">Mark Sold</button>` : ''}
                 </div>
             </div>
-        `).join('') || '<p style="text-align:center; color:#444;">Inventory empty.</p>';
+        `).join('') || '<p style="text-align:center; color:#444; margin-top:20px;">No inventory found.</p>';
     }
 
     function shareWA(id) {
         const inv = JSON.parse(localStorage.getItem('babar_inventory'));
         const p = inv.find(x => x.id == id);
-        const text = `*BABAR REAL ESTATE*%0A%0A🏠 *Plot:* ${p.title}%0A📍 *Location:* ${p.sector}%0A💰 *Price:* Rs. ${p.price}%0A📊 *Status:* ${p.status}%0A📝 *Details:* ${p.desc}%0A%0A_Contact for more info!_`;
+        
+        let mapLink = p.mapUrl ? `%0A%0A📍 *View Official Map:*%0A${p.mapUrl}` : "";
+        
+        const text = `*BABAR REAL ESTATE - NEW LISTING*%0A%0A🏠 *Plot Details:* ${p.title}%0A💰 *Price:* ${p.price}%0A📝 *Description:* ${p.desc}${mapLink}%0A%0A_Regard: Bilal Mughal_`;
+        
         window.open(`https://wa.me/?text=${text}`, '_blank');
     }
 
@@ -117,7 +155,8 @@
         let val = document.getElementById('searchInput').value.toLowerCase();
         let cards = document.getElementsByClassName('inventory-card');
         for(let i=0; i<cards.length; i++) {
-            cards[i].style.display = cards[i].innerText.toLowerCase().includes(val) ? "block" : "none";
+            let content = cards[i].innerText.toLowerCase();
+            cards[i].style.display = content.includes(val) ? "block" : "none";
         }
     }
 </script>
