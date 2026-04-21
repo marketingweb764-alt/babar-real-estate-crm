@@ -3,150 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Member Access - Babar Real Estate</title>
+    <title>Login - Babar Real Estate</title>
     <style>
-        body { 
-            background: #000; 
-            color: #fff; 
-            font-family: 'Segoe UI', sans-serif; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            height: 100vh; 
-            margin: 0; 
-        }
-        .auth-card { 
-            background: #111; 
-            padding: 40px 30px; 
-            border-radius: 20px; 
-            border: 1px solid #D4AF37; 
-            width: 100%; 
-            max-width: 380px; 
-            text-align: center; 
-            box-shadow: 0 10px 40px rgba(212, 175, 55, 0.1);
-        }
-        .logo-box { margin-bottom: 25px; }
-        .logo-box img { width: 100px; }
-        
-        h1 { color: #D4AF37; font-size: 20px; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 1px; }
-        
-        .input-group { margin-bottom: 15px; text-align: left; }
-        input { 
-            width: 100%; 
-            padding: 14px; 
-            background: #000; 
-            border: 1px solid #333; 
-            border-radius: 10px; 
-            color: #fff; 
-            box-sizing: border-box; 
-            font-size: 14px;
-            outline: none;
-        }
-        input:focus { border-color: #D4AF37; }
-        
-        .btn { 
-            width: 100%; 
-            padding: 14px; 
-            background: #D4AF37; 
-            color: #000; 
-            border: none; 
-            border-radius: 10px; 
-            font-weight: bold; 
-            cursor: pointer; 
-            margin-top: 15px; 
-            text-transform: uppercase;
-            font-size: 14px;
-            transition: 0.3s;
-        }
-        .btn:hover { background: #b8962d; transform: translateY(-2px); }
-        
-        .toggle-link { color: #888; font-size: 12px; margin-top: 20px; cursor: pointer; display: block; }
-        .toggle-link b { color: #D4AF37; text-decoration: underline; }
-        .hidden { display: none; }
+        body { background: #000; color: #fff; font-family: 'Segoe UI', sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        .login-card { background: #111; padding: 40px; border-radius: 20px; border: 1px solid #D4AF37; width: 90%; max-width: 350px; text-align: center; box-shadow: 0 10px 30px rgba(212, 175, 55, 0.1); }
+        h1 { color: #D4AF37; font-size: 22px; margin-bottom: 30px; text-transform: uppercase; letter-spacing: 2px; }
+        input { width: 100%; padding: 15px; margin-bottom: 20px; border-radius: 10px; border: 1px solid #222; background: #000; color: #fff; box-sizing: border-box; }
+        .login-btn { background: linear-gradient(45deg, #D4AF37, #b8860b); color: #000; width: 100%; padding: 15px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
+        p { font-size: 10px; color: #555; margin-top: 20px; letter-spacing: 1px; }
     </style>
 </head>
 <body>
 
-<div class="auth-card">
-    <div class="logo-box">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEVvI7eYhezjFs4kCMSVpRh4W6Uoap6i4yXQ&s" alt="Logo">
-    </div>
-    
-    <div id="loginForm">
-        <h1>Member Access</h1>
-        <div class="input-group">
-            <input type="text" id="userUID" placeholder="Enter ID (Email)">
-        </div>
-        <div class="input-group">
-            <input type="password" id="userKey" placeholder="Access Key">
-        </div>
-        <button class="btn" onclick="handleLogin()">ENTER PORTAL</button>
-        <span class="toggle-link" onclick="toggleForms()">New member? <b>Register Here</b></span>
-    </div>
-
-    <div id="registerForm" class="hidden">
-        <h1>Create Account</h1>
-        <div class="input-group">
-            <input type="text" id="regName" placeholder="Full Name">
-        </div>
-        <div class="input-group">
-            <input type="text" id="regEmail" placeholder="Email Address">
-        </div>
-        <div class="input-group">
-            <input type="password" id="regPass" placeholder="Set Access Key">
-        </div>
-        <button class="btn" onclick="handleRegister()">REGISTER NOW</button>
-        <span class="toggle-link" onclick="toggleForms()">Already have an account? <b>Login</b></span>
-    </div>
+<div class="login-card">
+    <h1>Babar Real Estate</h1>
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+    <button class="login-btn" onclick="checkLogin()">Login to CRM</button>
+    <p>POST BY BILAL MUGHAL</p>
 </div>
 
 <script>
-    function toggleForms() {
-        document.getElementById('loginForm').classList.toggle('hidden');
-        document.getElementById('registerForm').classList.toggle('hidden');
-    }
+    function checkLogin() {
+        const user = document.getElementById('username').value;
+        const pass = document.getElementById('password').value;
 
-    function handleRegister() {
-        const name = document.getElementById('regName').value;
-        const email = document.getElementById('regEmail').value;
-        const pass = document.getElementById('regPass').value;
-        
-        if(!name || !email || !pass) { alert("Please fill all fields!"); return; }
-        
-        let users = JSON.parse(localStorage.getItem('crm_users')) || [];
-        if(users.find(u => u.email === email)) { alert("ID already exists!"); return; }
-        
-        users.push({ name, email, pass });
-        localStorage.setItem('crm_users', JSON.stringify(users));
-        alert("Registration Successful! Please Login.");
-        toggleForms();
-    }
-
-    function handleLogin() {
-        const uid = document.getElementById('userUID').value;
-        const key = document.getElementById('userKey').value;
-        let users = JSON.parse(localStorage.getItem('crm_users')) || [];
-        
-        // CEO Admin Check
-        if(uid === "admin@babar.com" && key === "babar123") {
-            sessionStorage.setItem('loggedIn', 'true');
-            sessionStorage.setItem('userName', 'Babar Mughal');
+        // Aapka Secret Password
+        if(user === "admin" && pass === "babar786") {
             sessionStorage.setItem('userRole', 'CEO');
-            window.location.href = "index.html";
-            return;
-        }
-
-        const user = users.find(u => u.email === uid && u.pass === key);
-        if(user) {
-            sessionStorage.setItem('loggedIn', 'true');
-            sessionStorage.setItem('userName', user.name);
-            sessionStorage.setItem('userRole', 'Team Member');
-            window.location.href = "index.html";
+            window.location.href = "index.html"; // Login ke baad Dashboard par jayega
         } else {
-            alert("Invalid ID or Access Key!");
+            alert("Ghalat Password! Bilal bhai se rabta karein.");
         }
     }
 </script>
-
 </body>
 </html>
