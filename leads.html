@@ -1,45 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Babar Real Estate | Add Leads</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: #111;
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid #d4af37; /* Gold Border */
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+            width: 100%;
+            max-width: 400px;
+        }
+        h2 { color: #d4af37; text-align: center; margin-bottom: 20px; }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background: #222;
+            border: 1px solid #444;
+            color: white;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(45deg, #d4af37, #f4cf6d);
+            border: none;
+            color: black;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+        button:hover { transform: scale(1.02); box-shadow: 0 0 15px #d4af37; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Add New Lead</h2>
+    <form id="leadForm">
+        <input type="text" id="clientName" placeholder="Client Name" required>
+        <input type="text" id="clientPhone" placeholder="Phone Number" required>
+        <select id="propertyInterest">
+            <option value="DHA Lahore">DHA Lahore</option>
+            <option value="DHA Quetta">DHA Quetta</option>
+            <option value="DHA Bahawalpur">DHA Bahawalpur</option>
+            <option value="Commercial">Commercial Plot</option>
+        </select>
+        <button type="submit" id="submitBtn">SAVE LEAD TO CLOUD</button>
+    </form>
+</div>
+
 <script type="module">
-  // Firebase SDKs
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-  // Aapki Firebase Configuration (Wahi jo pehle thi)
-  const firebaseConfig = {
-    apiKey: "AIzaSy...", // Bilal bhai, yahan apni purani API Key paste karein
-    authDomain: "babar-realestate-crm.firebaseapp.com",
-    projectId: "babar-realestate-crm",
-    storageBucket: "babar-realestate-crm.appspot.com",
-    messagingSenderId: "...",
-    appId: "..."
-  };
+    // Bilal bhai, apni Firebase Config yahan paste karein
+    const firebaseConfig = {
+        apiKey: "PASTE_YOUR_API_KEY_HERE",
+        authDomain: "babar-realestate-crm.firebaseapp.com",
+        projectId: "babar-realestate-crm",
+        storageBucket: "babar-realestate-crm.appspot.com",
+        messagingSenderId: "YOUR_ID",
+        appId: "YOUR_APP_ID"
+    };
 
-  // Initialize Firebase & Firestore
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-  // Lead Save Karne ka Function
-  const leadForm = document.getElementById('leadForm');
-  if(leadForm) {
+    const leadForm = document.getElementById('leadForm');
     leadForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      
-      const clientName = document.getElementById('clientName').value;
-      const clientPhone = document.getElementById('clientPhone').value;
-      const interest = document.getElementById('propertyInterest').value;
+        e.preventDefault();
+        const btn = document.getElementById('submitBtn');
+        btn.innerText = "Saving...";
+        btn.disabled = true;
 
-      try {
-        await addDoc(collection(db, "leads"), {
-          name: clientName,
-          phone: clientPhone,
-          property: interest,
-          timestamp: serverTimestamp()
-        });
-        alert("🎉 Lead Saved Successfully in Cloud!");
-        leadForm.reset();
-      } catch (error) {
-        console.error("Error adding document: ", error);
-        alert("Error: Data save nahi hua.");
-      }
+        try {
+            await addDoc(collection(db, "leads"), {
+                name: document.getElementById('clientName').value,
+                phone: document.getElementById('clientPhone').value,
+                property: document.getElementById('propertyInterest').value,
+                timestamp: serverTimestamp()
+            });
+            alert("🎉 MUBARAK! Lead Database mein save ho gayi!");
+            leadForm.reset();
+        } catch (error) {
+            console.error(error);
+            alert("Error: Data save nahi hua! Console check karein.");
+        } finally {
+            btn.innerText = "SAVE LEAD TO CLOUD";
+            btn.disabled = false;
+        }
     });
-  }
-</script> 
+</script>
+
+</body>
+</html>
