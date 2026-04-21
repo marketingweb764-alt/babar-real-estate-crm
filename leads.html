@@ -7,54 +7,50 @@
     <style>
         body { background: #000; color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; }
         .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #D4AF37; padding-bottom: 15px; margin-bottom: 20px; }
-        .header h1 { color: #D4AF37; font-size: 18px; margin: 0; text-transform: uppercase; letter-spacing: 1px; }
+        .header h1 { color: #D4AF37; font-size: 18px; margin: 0; text-transform: uppercase; }
         .back-btn { color: #fff; text-decoration: none; font-size: 12px; border: 1px solid #333; padding: 8px 15px; border-radius: 8px; background: #111; }
 
-        .search-box { margin-bottom: 20px; }
-        #searchInput { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid #333; background: #111; color: #fff; outline: none; box-sizing: border-box; font-size: 14px; }
+        /* Summary Button Style */
+        .summary-btn { background: linear-gradient(45deg, #D4AF37, #b8860b); color: #000; border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-bottom: 20px; width: 100%; text-transform: uppercase; }
 
         .form-container { background: #111; padding: 20px; border-radius: 15px; border: 1px solid #333; margin-bottom: 30px; }
         input, select, textarea { width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 8px; border: 1px solid #222; background: #000; color: #fff; box-sizing: border-box; }
-        .submit-btn { background: #D4AF37; color: #000; width: 100%; padding: 14px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
-
-        .lead-card { background: #161616; border-radius: 18px; padding: 20px; border: 1px solid #222; margin-bottom: 15px; position: relative; }
-        .status-tag { position: absolute; top: 20px; right: 20px; font-size: 9px; font-weight: bold; padding: 5px 10px; border-radius: 6px; text-transform: uppercase; }
         
-        .status-new { background: rgba(136, 136, 136, 0.1); color: #888; border: 1px solid #888; }
-        .status-follow-up { background: rgba(241, 196, 15, 0.1); color: #f1c40f; border: 1px solid #f1c40f; }
-        .status-meeting { background: rgba(52, 152, 219, 0.1); color: #3498db; border: 1px solid #3498db; }
-        .status-closed { background: rgba(39, 174, 96, 0.1); color: #2ecc71; border: 1px solid #2ecc71; }
+        /* Priority Colors */
+        .priority-high { border-left: 5px solid #ff4d4d !important; box-shadow: 0 0 10px rgba(255, 77, 77, 0.2); }
+        .priority-medium { border-left: 5px solid #ffa500 !important; }
+        .priority-low { border-left: 5px solid #2ecc71 !important; }
 
-        .lead-card h3 { margin: 0; color: #D4AF37; font-size: 17px; }
-        .footer-info { font-size: 10px; color: #555; margin-top: 15px; border-top: 1px solid #222; padding-top: 12px; display: flex; justify-content: space-between; }
-        
+        .lead-card { background: #161616; border-radius: 15px; padding: 20px; border: 1px solid #222; margin-bottom: 15px; position: relative; }
+        .status-tag { position: absolute; top: 15px; right: 15px; font-size: 9px; font-weight: bold; padding: 4px 8px; border-radius: 4px; }
+        .status-new { background: #444; color: #fff; }
+        .status-follow-up { background: #f1c40f; color: #000; }
+        .status-closed { background: #2ecc71; color: #000; }
+
         .btn-group { display: flex; gap: 8px; margin-top: 15px; flex-wrap: wrap; }
-        .btn-wa { background: #25D366; color: #fff; border: none; padding: 10px; border-radius: 8px; font-size: 11px; font-weight: bold; cursor: pointer; flex: 1; text-align: center; }
-        .btn-ceo { background: #D4AF37; color: #000; border: none; padding: 10px; border-radius: 8px; font-size: 11px; font-weight: bold; cursor: pointer; flex: 1; }
-        .btn-update { background: #222; color: #fff; border: 1px solid #333; padding: 10px; border-radius: 8px; font-size: 11px; cursor: pointer; }
+        .btn-wa { background: #25D366; color: #fff; border: none; padding: 10px; border-radius: 8px; font-size: 11px; flex: 1; cursor: pointer; }
+        .btn-ceo { background: #D4AF37; color: #000; border: none; padding: 10px; border-radius: 8px; font-size: 11px; flex: 1; cursor: pointer; }
+        .submit-btn { background: #D4AF37; color: #000; width: 100%; padding: 14px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div class="header">
-    <h1>Lead Management</h1>
+    <h1>Leads Management</h1>
     <a href="index.html" class="back-btn">← Home</a>
 </div>
 
-<div class="search-box">
-    <input type="text" id="searchInput" onkeyup="searchLeads()" placeholder="Search Name, Phone, Status...">
-</div>
+<button class="summary-btn" onclick="sendDailySummary()">📊 Send Daily Summary to CEO</button>
 
 <div class="form-container">
     <input type="text" id="lName" placeholder="Client Name">
-    <input type="text" id="lPhone" placeholder="Phone (e.g. 0321...)">
-    <select id="lStatus">
-        <option value="New">New Lead</option>
-        <option value="Follow-up">Follow-up</option>
-        <option value="Meeting">Meeting Fixed</option>
-        <option value="Closed">Deal Closed</option>
+    <input type="text" id="lPhone" placeholder="Phone Number">
+    <select id="lPriority">
+        <option value="low">Low Priority</option>
+        <option value="medium" selected>Medium Priority</option>
+        <option value="high">🔥 HIGH PRIORITY (VIP)</option>
     </select>
-    <textarea id="lNote" placeholder="Interest/Details..."></textarea>
+    <textarea id="lNote" placeholder="Plot requirements..."></textarea>
     <button class="submit-btn" onclick="addLead()">Save Lead</button>
 </div>
 
@@ -63,19 +59,22 @@
 <script>
     const userRole = sessionStorage.getItem('userRole');
     const userName = sessionStorage.getItem('userName') || 'Team Member';
-    const CEO_NUMBER = '923244000041'; // Babar Mughal Sahib
+    const CEO_NUMBER = '923244000041';
 
     window.onload = displayLeads;
 
     function addLead() {
         const name = document.getElementById('lName').value;
         const phone = document.getElementById('lPhone').value;
-        const status = document.getElementById('lStatus').value;
+        const priority = document.getElementById('lPriority').value;
         const note = document.getElementById('lNote').value;
-        if(!name || !phone) return alert("Fill Name and Phone!");
+        if(!name || !phone) return alert("Please fill Name and Phone!");
 
         let leads = JSON.parse(localStorage.getItem('babar_leads')) || [];
-        leads.unshift({ id: Date.now(), name, phone, status, note, addedBy: userName, date: new Date().toLocaleDateString() });
+        leads.unshift({ 
+            id: Date.now(), name, phone, priority, note, 
+            status: 'New', addedBy: userName, date: new Date().toLocaleDateString() 
+        });
         localStorage.setItem('babar_leads', JSON.stringify(leads));
         
         document.getElementById('lName').value = '';
@@ -89,54 +88,43 @@
         if(userRole !== 'CEO') leads = leads.filter(l => l.addedBy === userName);
 
         container.innerHTML = leads.map(l => `
-            <div class="lead-card lead-item">
-                <span class="status-tag status-${l.status.toLowerCase().replace(' ', '-')}">${l.status}</span>
-                <h3>${l.name}</h3>
+            <div class="lead-card priority-${l.priority}">
+                <span class="status-tag status-${l.status.toLowerCase()}">${l.status}</span>
+                <h3>${l.name} ${l.priority === 'high' ? '⭐' : ''}</h3>
                 <p>📞 ${l.phone}</p>
-                <p style="color:#777; font-size:12px;">${l.note}</p>
+                <p style="color:#888; font-size:12px;">${l.note}</p>
                 
                 <div class="btn-group">
                     <button class="btn-wa" onclick="contactWA('${l.phone}', '${l.name}')">📲 CLIENT</button>
-                    ${userRole !== 'CEO' ? `<button class="btn-ceo" onclick="reportToCEO('${l.id}')">📢 REPORT CEO</button>` : ''}
-                    <button class="btn-update" onclick="cycleStatus(${l.id})">Update Status</button>
-                </div>
-                
-                <div class="footer-info">
-                    <span>👤 ${l.addedBy}</span>
-                    <span>📅 ${l.date}</span>
+                    <button class="btn-ceo" onclick="reportToCEO('${l.id}')">📢 REPORT CEO</button>
                 </div>
             </div>
-        `).join('') || '<p style="text-align:center;">No leads found.</p>';
+        `).join('');
+    }
+
+    function sendDailySummary() {
+        const leads = JSON.parse(localStorage.getItem('babar_leads')) || [];
+        const today = new Date().toLocaleDateString();
+        const todaysLeads = leads.filter(l => l.date === today);
+        
+        const high = todaysLeads.filter(l => l.priority === 'high').length;
+        const total = todaysLeads.length;
+
+        let msg = `*DAILY PROGRESS REPORT - BABAR REAL ESTATE*%0A%0A📅 *Date:* ${today}%0A👤 *Reported by:* ${userName}%0A%0A✅ *Total Leads Today:* ${total}%0A🔥 *High Priority:* ${high}%0A%0A_System is working perfectly!_`;
+        window.open(`https://wa.me/${CEO_NUMBER}?text=${msg}`, '_blank');
     }
 
     function contactWA(phone, name) {
         let clean = phone.replace(/\D/g, ''); 
         if(!clean.startsWith('92')) clean = '92' + clean.replace(/^0+/, '');
-        const msg = `Salam *${name}*, Babar Real Estate se baat kar rahe hain...`;
+        const msg = `Salam *${name}*, Babar Real Estate se rabta karne ka shukria. Humari team aap se jald mazeed details share karegi.`;
         window.open(`https://wa.me/${clean}?text=${encodeURIComponent(msg)}`, '_blank');
     }
 
     function reportToCEO(id) {
         const l = (JSON.parse(localStorage.getItem('babar_leads'))).find(x => x.id == id);
-        const msg = `*LEAD REPORT - BABAR REAL ESTATE*%0A%0A👤 *Client:* ${l.name}%0A📞 *Phone:* ${l.phone}%0A📊 *Status:* ${l.status}%0A📝 *Note:* ${l.note}%0A%0A_Reported by: ${userName}_`;
+        const msg = `*NEW LEAD REPORT*%0A%0A👤 *Client:* ${l.name}%0A📊 *Priority:* ${l.priority.toUpperCase()}%0A📝 *Note:* ${l.note}`;
         window.open(`https://wa.me/${CEO_NUMBER}?text=${msg}`, '_blank');
-    }
-
-    function cycleStatus(id) {
-        let leads = JSON.parse(localStorage.getItem('babar_leads'));
-        let l = leads.find(x => x.id == id);
-        const steps = ['New', 'Follow-up', 'Meeting', 'Closed'];
-        l.status = steps[(steps.indexOf(l.status) + 1) % steps.length];
-        localStorage.setItem('babar_leads', JSON.stringify(leads));
-        displayLeads();
-    }
-
-    function searchLeads() {
-        let val = document.getElementById('searchInput').value.toLowerCase();
-        let items = document.getElementsByClassName('lead-item');
-        for(let i=0; i<items.length; i++) {
-            items[i].style.display = items[i].innerText.toLowerCase().includes(val) ? "block" : "none";
-        }
     }
 </script>
 </body>
