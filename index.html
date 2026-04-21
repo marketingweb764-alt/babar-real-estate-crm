@@ -3,116 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Babar Real Estate | Executive CRM</title>
+    <title>Babar Real Estate | CRM Master</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root { --gold: #d4af37; --black: #000; }
-        body { background: var(--black); color: #fff; font-family: 'Poppins', sans-serif; margin: 0; }
+        body { background: var(--black); color: #fff; font-family: 'Poppins', sans-serif; margin: 0; overflow-x: hidden; }
         .gold-text { color: var(--gold); }
         .gold-bg { background: linear-gradient(45deg, #d4af37, #f4cf6d); color: #000; }
         .gold-border { border: 1px solid var(--gold); }
-        .glass-card { background: #111; border: 1px solid #222; border-radius: 20px; padding: 25px; transition: 0.3s; }
-        .page { display: none; padding: 20px; max-width: 1200px; margin: auto; }
-        .active { display: block; animation: fadeIn 0.5s; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .glass-card { background: #111; border: 1px solid #222; border-radius: 20px; padding: 25px; transition: 0.3s; cursor: pointer; }
+        .glass-card:hover { border-color: var(--gold); transform: translateY(-5px); }
+        .page { display: none; padding: 20px; max-width: 800px; margin: auto; animation: fadeIn 0.4s; }
+        .active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        input, select, textarea { width: 100%; padding: 12px; margin-bottom: 12px; background: #000; border: 1px solid #333; color: #fff; border-radius: 10px; outline: none; }
+        input:focus { border-color: var(--gold); }
     </style>
 </head>
 <body>
 
-    <div id="loginPage" class="page active min-h-screen flex items-center justify-center">
-        <div class="w-full max-w-md p-8 glass-card gold-border text-center">
-            <h1 class="text-3xl font-bold gold-text uppercase tracking-widest mb-2">Babar Real Estate</h1>
-            <p class="text-[10px] text-gray-500 mb-8">SECURE EXECUTIVE PORTAL</p>
-            <input type="email" id="loginEmail" placeholder="Gmail Address" class="w-full p-3 bg-black border border-gray-800 rounded-xl mb-4 outline-none focus:border-[#d4af37]">
-            <input type="password" id="loginPass" placeholder="Password" class="w-full p-3 bg-black border border-gray-800 rounded-xl mb-4 outline-none focus:border-[#d4af37]">
-            <button onclick="showPage('dashboardPage')" class="w-full py-4 font-bold gold-bg rounded-xl uppercase hover:scale-105 transition">Login to CRM</button>
-            <p class="text-xs text-gray-600 mt-6 tracking-widest">POST BY BILAL MUGHAL</p>
+    <div id="loginPage" class="page active mt-20">
+        <div class="text-center mb-10">
+            <h1 class="text-4xl font-bold gold-text tracking-widest uppercase">Babar Real Estate</h1>
+            <p class="text-[10px] text-gray-500 mt-2">PREMIUM EXECUTIVE ACCESS</p>
+        </div>
+        <div class="glass-card gold-border max-w-md mx-auto">
+            <input type="email" id="loginEmail" placeholder="Gmail Address">
+            <input type="password" id="loginPass" placeholder="Password">
+            <button onclick="showPage('dashboardPage')" class="w-full py-4 gold-bg font-bold rounded-xl uppercase">Login to CRM</button>
+            <p class="text-[10px] text-center mt-6 text-gray-700 tracking-widest">POST BY BILAL MUGHAL</p>
         </div>
     </div>
 
     <div id="dashboardPage" class="page">
-        <div class="flex justify-between items-center border-bottom gold-border pb-4 mb-8">
-            <h1 class="text-xl gold-text font-bold uppercase">Main Portal</h1>
-            <button onclick="showPage('loginPage')" class="text-xs border border-red-500 px-3 py-1 rounded">Logout</button>
+        <div class="flex justify-between items-center mb-8 border-b border-gray-800 pb-4">
+            <h2 class="gold-text font-bold uppercase tracking-widest">Master Portal</h2>
+            <button onclick="showPage('loginPage')" class="text-xs text-red-500">Logout</button>
         </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div onclick="showPage('leadsPage')" class="glass-card cursor-pointer hover:border-[#d4af37]">
-                <h2 class="text-xl gold-text">➕ Add Leads</h2>
-                <p class="text-sm text-gray-500">DHA Lahore, Quetta & Bahawalpur</p>
-            </div>
-            <div onclick="showPage('inventoryPage')" class="glass-card cursor-pointer hover:border-[#d4af37]">
-                <h2 class="text-xl gold-text">🏠 Inventory</h2>
-                <p class="text-sm text-gray-500">Search Plots & View Maps</p>
-            </div>
-            <div onclick="showPage('accountsPage')" class="glass-card cursor-pointer hover:border-[#d4af37]">
-                <h2 class="text-xl gold-text">💰 Accounts</h2>
-                <p class="text-sm text-gray-500">Income & Expense Tracking</p>
-            </div>
-            <div onclick="showPage('calcPage')" class="glass-card cursor-pointer hover:border-[#d4af37]">
-                <h2 class="text-xl gold-text">🧮 Calculator</h2>
-                <p class="text-sm text-gray-500">Installment & Plan Estimates</p>
-            </div>
-            <div onclick="showPage('teamPage')" class="glass-card cursor-pointer hover:border-[#d4af37]">
-                <h2 class="text-xl gold-text">👥 Team</h2>
-                <p class="text-sm text-gray-500">Manage Agents & Tasks</p>
-            </div>
+        <div class="grid grid-cols-2 gap-4">
+            <div onclick="showPage('leadsPage')" class="glass-card">➕ Add Leads</div>
+            <div onclick="showPage('viewLeadsPage')" class="glass-card">📊 View Leads</div>
+            <div onclick="showPage('inventoryPage')" class="glass-card">🏠 Inventory</div>
+            <div onclick="showPage('accountsPage')" class="glass-card">💰 Accounts</div>
+            <div onclick="showPage('calcPage')" class="glass-card">🧮 Calculator</div>
+            <div onclick="showPage('teamPage')" class="glass-card">👥 Team</div>
         </div>
     </div>
 
-    <div id="accountsPage" class="page">
+    <div id="leadsPage" class="page">
         <button onclick="showPage('dashboardPage')" class="mb-4 text-sm gold-text">← Back</button>
-        <div class="grid grid-cols-2 gap-4 mb-6">
-            <div class="glass-card text-center border-b-4 border-green-500">
-                <p class="text-xs text-gray-400">INCOME</p>
-                <h3 id="totalIncome" class="text-lg font-bold">Rs. 0</h3>
-            </div>
-            <div class="glass-card text-center border-b-4 border-red-500">
-                <p class="text-xs text-gray-400">EXPENSE</p>
-                <h3 id="totalExpense" class="text-lg font-bold">Rs. 0</h3>
-            </div>
+        <h2 class="text-xl mb-6 gold-text">Add New Lead</h2>
+        <div class="glass-card">
+            <input type="text" id="clientName" placeholder="Client Name">
+            <input type="text" id="clientPhone" placeholder="Phone Number">
+            <select id="propertyInterest">
+                <option value="DHA Lahore">DHA Lahore</option>
+                <option value="DHA Quetta">DHA Quetta</option>
+                <option value="DHA Bahawalpur">DHA Bahawalpur</option>
+            </select>
+            <button id="saveLeadBtn" class="w-full py-3 gold-bg font-bold rounded-lg">SAVE TO CLOUD</button>
         </div>
-        <div class="glass-card mb-6">
-            <input type="text" id="tTitle" placeholder="Description" class="w-full p-2 bg-black rounded mb-2 border border-gray-800">
-            <input type="number" id="tAmount" placeholder="Amount" class="w-full p-2 bg-black rounded mb-2 border border-gray-800">
-            <button onclick="addTransaction()" class="w-full gold-bg py-2 rounded font-bold">ADD ENTRY</button>
-        </div>
-        <div id="transactionsList"></div>
     </div>
 
     <div id="calcPage" class="page">
         <button onclick="showPage('dashboardPage')" class="mb-4 text-sm gold-text">← Back</button>
-        <div class="glass-card max-w-md mx-auto">
-            <h2 class="gold-text mb-4">Installment Calculator</h2>
-            <input type="number" id="totalPrice" placeholder="Total Price" class="w-full p-3 bg-black border border-gray-800 rounded-xl mb-4">
-            <input type="number" id="downPayment" placeholder="Down Payment" class="w-full p-3 bg-black border border-gray-800 rounded-xl mb-4">
-            <input type="number" id="months" placeholder="Months" class="w-full p-3 bg-black border border-gray-800 rounded-xl mb-4">
-            <button onclick="calculatePlan()" class="w-full gold-bg py-3 rounded font-bold">CALCULATE</button>
-            <div id="calcResult" class="mt-4 p-4 bg-[#d4af37] text-black rounded-xl hidden">
+        <h2 class="text-xl mb-6 gold-text">Installment Calculator</h2>
+        <div class="glass-card">
+            <input type="number" id="totalPrice" placeholder="Total Price">
+            <input type="number" id="downPayment" placeholder="Down Payment">
+            <input type="number" id="months" placeholder="Months">
+            <button onclick="calculatePlan()" class="w-full py-3 gold-bg font-bold rounded-lg">CALCULATE</button>
+            <div id="calcResult" class="mt-4 p-4 bg-white text-black rounded-lg hidden">
                 <p>Monthly: <b id="resMonthly">0</b></p>
             </div>
         </div>
     </div>
 
-    <script>
-        function showPage(pageId) {
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // Firebase Config (Bilal bhai, ye wahi keys hain jo ap ne di thin)
+        const firebaseConfig = {
+            apiKey: "AIzaSyB-D3GjR5G_hL2x9X8zM0W4Q1V6S7N8P9",
+            authDomain: "babar-realestate-crm.firebaseapp.com",
+            projectId: "babar-realestate-crm",
+            storageBucket: "babar-realestate-crm.appspot.com",
+            messagingSenderId: "925746578953",
+            appId: "1:925746578953:web:3565573a20da750b0d1ad8"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Page Switcher Function
+        window.showPage = function(pageId) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
             window.scrollTo(0,0);
         }
 
-        // ACCOUNTS LOGIC
-        function addTransaction() {
-            const title = document.getElementById('tTitle').value;
-            const amount = document.getElementById('tAmount').value;
-            if(!title || !amount) return;
-            // Yahan aap apna Firebase logic ya LocalStorage logic dal sakte hain
-            alert("Entry Saved: " + title);
-        }
+        // Save Lead Logic
+        document.getElementById('saveLeadBtn').addEventListener('click', async () => {
+            const name = document.getElementById('clientName').value;
+            const phone = document.getElementById('clientPhone').value;
+            const property = document.getElementById('propertyInterest').value;
 
-        // CALCULATOR LOGIC
-        function calculatePlan() {
+            if(!name || !phone) return alert("Pehle details likhen!");
+
+            try {
+                await addDoc(collection(db, "leads"), {
+                    name, phone, property, timestamp: serverTimestamp()
+                });
+                alert("🎉 Mubarak! Data Cloud par save ho gaya.");
+                showPage('dashboardPage');
+            } catch (e) { alert("Error: Data save nahi hua."); }
+        });
+
+        // Calculator Logic
+        window.calculatePlan = function() {
             const total = document.getElementById('totalPrice').value;
             const down = document.getElementById('downPayment').value;
             const m = document.getElementById('months').value;
